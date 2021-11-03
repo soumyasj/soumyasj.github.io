@@ -5,15 +5,15 @@ permalink: /publications/
 author_profile: true
 ---
 <!-- TEMP WAY -->
-* <strong>Few-shot Visual Relationship Co-localization</strong> <br>
-  <strong>Revant Teotia</strong>, Vaibhav Mishra, Mayank Maheshwari, Anand Mishra <br>
-  ICCV 2021 <br>
-  [paper](https://arxiv.org/abs/2108.11618) | [project page](https://vl2g.github.io/projects/vrc/) | [code](https://github.com/vl2g/VRC.git)
+* <strong>Look, Read and Ask: Learning to Ask Questions by Reading Text in Images</strong> <br>
+  <strong>Soumya Shamarao Jahagirdar</strong>, Shankar Gangisetty, Anand Mishra <br>
+  ICDAR, 2021 <br>
+  [paper](https://link.springer.com/chapter/10.1007/978-3-030-86549-8_22) | [project page](https://sites.google.com/site/shankarsetty/research/textvqg) | [code](https://github.com/soumyasj/textVQG) | [video](https://www.youtube.com/watch?v=31C2wSzCxpM)
 
-* <strong>Realtime Indoor Workout Analysis Using Machine Learning & Computer Vision</strong> <br>
-  Amit Nagarkoti, <strong> Revant Teotia</strong>, Amith K. Mahale, and Pankaj K. Das <br>
-  IEEE EMBC 2019 <br>
-  [paper](https://ieeexplore.ieee.org/document/8856547)
+* <strong>DeepDNet: Deep Dense Network for Depth Completion Task</strong> <br>
+  Girish Hegde, Tushar Pharale, <strong> Soumya Jahagirdar</strong>, Vaishakh Nargund, Ramesh Ashok Tabib, Uma Mudenagudi, Basavaraja Vandrotti, Ankit Dhiman <br>
+  WiCV, CVPR, 2021 <br>
+  [paper](https://openaccess.thecvf.com/content/CVPR2021W/WiCV/papers/Hegde_DeepDNet_Deep_Dense_Network_for_Depth_Completion_Task_CVPRW_2021_paper.pdf)
 
 <!-- TEMP WAY END -->
 <!-- TODO : IN FUTURE ADD PROJECS IN _projects and use the code below -->
