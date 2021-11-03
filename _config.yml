@@ -7,13 +7,13 @@
 
 # Site Settings
 locale                   : "en-US"
-title                    : "Revant Teotia"
+title                    : "Soumya Shamarao Jahagirdar"
 title_separator          : "-"
-name                     : &name "Revant Teotia"
-description              : &description "M.S. student in Computer Science at Columbia University"
-url                      : "" #https://revantteotia.github.io # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
+name                     : &name "Soumya Shamarao Jahagirdar"
+description              : &description "Masters' by Research student at CVIT, IIIT Hyderabad, India."
+url                      : ""  # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
-repository               : "revantteotia/revantteotia.github.io"
+repository               : "soumyasj/soumyasj.github.io"
 teaser                   :  # filename of teaser fallback teaser image placed in /images/, .e.g. "500x300.png"
 breadcrumbs              : false # true, false (default)
 words_per_minute         : 160
@@ -80,14 +80,14 @@ analytics:
 
 # Site Author
 author:
-  name             : "Revant Teotia"
-  avatar           : "dp-dv-crop.jpg" #"profile.png"
-  bio              : "M.S. student in Computer Science at Columbia University"
-  location         : "New York, NY"
+  name             : "Soumya Shamarao Jahagirdar"
+  avatar           : "soumya.jpg" #"profile.png"
+  bio              : "Masters' by Research at CVIT, IIIT Hyderabad, India."
+  location         : "Hyderabad, Telangana"
   employer         :
   pubmed           : #"https://www.ncbi.nlm.nih.gov/pubmed/?term=john+snow"
-  googlescholar    : #"http://yourfullgooglescholarurl.com"
-  email            :
+  googlescholar    : "https://scholar.google.com/citations?hl=en&user=oA25i6QAAAAJ" #"http://yourfullgooglescholarurl.com"
+  email            : "soumyasj22@gmail.com"
   researchgate     :  # example: "https://www.researchgate.net/profile/yourprofile"
   uri              :
   bitbucket        :
@@ -96,13 +96,13 @@ author:
   flickr           :
   facebook         :
   foursquare       :
-  github           : "revantteotia"
+  github           : "soumyasj"
   google_plus      :
   keybase          :
   instagram        :
   impactstory      : #"https://profiles.impactstory.org/u/xxxx-xxxx-xxxx-xxxx"
   lastfm           :
-  linkedin         : "revantteotia"
+  linkedin         : "soumyajahagirdar"
   orcid            : #"http://orcid.org/yourorcidurl"
   pinterest        :
   soundcloud       :
