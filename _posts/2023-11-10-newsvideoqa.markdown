@@ -3,9 +3,9 @@ layout: post
 title:  "Watching the News: Towards VideoQA Models that can Read"
 date:   2023-11-10 22:21:59 +00:00
 image: /images/newsvideoqa_wacv_2023.png
-categories: sresearch
+categories: research
 author: "Soumya Shamarao Jahagirdar"
-authors: "<strong>Soumya Shamarao Jahagirdar</strong>,  Minesh Mathew, Dimosthenis Karatzas, C. V. Jawahar "
+authors: "Girish Hegde, Tushar Pharale, <strong>Soumya Shamarao Jahagirdar</strong>,  Minesh Mathew, Dimosthenis Karatzas, C. V. Jawahar "
 venue: "Winter Conference on Applications of Computer Vision, WACV"
 arxiv: https://arxiv.org/abs/2211.05588
 code: https://github.com/soumyasj/NewsVideoQA

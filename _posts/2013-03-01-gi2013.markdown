@@ -3,7 +3,7 @@ layout: post
 title:  "Dynamics Based Hand Tracking"
 date:   2013-03-01 22:21:59 +00:00
 image: /images/hand.png
-categories: research
+categories: CMU
 author: "Leo Keselman"
 venue: "Graphics Interfaces"
 authors: "Stan Melax, <strong>Leonid Keselman</strong>, Sterling Orsten"

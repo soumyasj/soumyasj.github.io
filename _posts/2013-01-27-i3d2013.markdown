@@ -3,7 +3,7 @@ layout: post
 title:  "Dynamics Based Hand Tracking"
 date:   2013-01-27 22:21:59 +00:00
 image: /images/i3d2013.png
-categories: research
+categories: CMU
 author: "Leo Keselman"
 subtitle: "Best Poster Award"
 authors: "Stan Melax, <strong>Leonid Keselman</strong>, Sterling Orsten"
