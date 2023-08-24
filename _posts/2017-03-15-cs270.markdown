@@ -1,14 +1,12 @@
 ---
 layout: post
-title:  "Automatically building Restaurant Ontologies"
+title:  "Watching the News: Towards VideoQA Models that can Read"
 date:   2017-03-15 22:20:59 +00:00
-image: /images/cs270.png
+image: /images/newsvideoqa_wacv_2023.png
 categories: Stanford
-author: "Leo Keselman"
-subtitle: "Personalized Recommendations"
-course: "CS270: Modeling Biomedical Systems"
-paper: /pdfs/cs270.pdf
-poster: /pdfs/cs270-poster.pdf
+author: "Soumya Shamarao Jahagirdar"
+paper: /pdfs/newsvideoqa_wacv_2023.pdf
+poster: /images/newsvideoqa_wacv_2023.png
 ---
 
 Using the [Yelp dataset](https://www.yelp.com/dataset) of reviews to model the semantics and relationships between cuisines, businesses and other properties useful for restaurant recommendations. 
