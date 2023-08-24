@@ -1,8 +1,8 @@
 ---
 layout: post
 title:  "Watching the News: Towards VideoQA Models that can Read"
-date:   2023-09-10 22:21:59 +00:00
-image: /images/newsvideoqa_wacv_2023.png
+date:   2023-04-04 22:21:59 +00:00
+image: /images/hands2015.png
 categories: research
 author: "Soumya Shamarao Jahagirdar"
 authors: "<strong>Soumya Shamarao Jahagirdar</strong>,  Minesh Mathew, Dimosthenis Karatzas, C. V. Jawahar "
