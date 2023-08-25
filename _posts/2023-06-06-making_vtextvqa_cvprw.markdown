@@ -2,7 +2,7 @@
 layout: post
 title:  "Making the V in Text-VQA Matter"
 date:   2023-06-06 22:21:59 +00:00
-# image: /images/newsvideoqa_wacv_2023.png
+image: images/newsvideoqa_wacv_2023.png
 categories: research
 author: "Soumya Shamarao Jahagirdar"
 authors: "Shamanthak Hegde, <strong>Soumya Shamarao Jahagirdar</strong>, Shankar Gangisetty"
