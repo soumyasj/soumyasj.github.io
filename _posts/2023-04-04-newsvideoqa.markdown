@@ -6,7 +6,7 @@ image: images/newsvideoqa.png
 categories: research
 author: "Soumya Shamarao Jahagirdar"
 authors: "<strong>Soumya Shamarao Jahagirdar</strong>,  Minesh Mathew, Dimosthenis Karatzas, C. V. Jawahar "
-venue: "Winter Conference on Applications of Computer Vision, WACV"
+venue: "Winter Conference on Applications of Computer Vision, <strong> WACV </strong>"
 arxiv: https://arxiv.org/abs/2211.05588
 code: https://github.com/soumyasj/NewsVideoQA
 website: http://cvit.iiit.ac.in/research/projects/cvit-projects/videoqa

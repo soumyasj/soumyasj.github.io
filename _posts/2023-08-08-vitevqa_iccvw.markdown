@@ -7,7 +7,7 @@ image: images/iccvw.png
 categories: research
 author: "Soumya Shamarao Jahagirdar"
 authors: "<strong>Soumya Shamarao Jahagirdar</strong>,  Minesh Mathew, Dimosthenis Karatzas, C. V. Jawahar "
-venue: "International Conference on Computer Vision (ICCV) Workshops, VLAR"
+venue: "International Conference on Computer Vision <strong> (ICCV) </strong> Workshops, VLAR"
 ---
 More details coming soon!
 

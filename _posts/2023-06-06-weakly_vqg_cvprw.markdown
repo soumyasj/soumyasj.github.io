@@ -6,7 +6,7 @@ image: images/charani.png
 categories: research
 author: "Soumya Shamarao Jahagirdar"
 authors: "Charani Alampalle, Shamanthak Hegde, <strong>Soumya Shamarao Jahagirdar</strong>, Shankar Gangisetty"
-venue: "Conference on Computer Vision and Pattern Recognition (CVPR) Workshops, ODRUM"
+venue: "Conference on Computer Vision and Pattern Recognition <strong> (CVPR) </strong> Workshops, ODRUM"
 arxiv: https://arxiv.org/abs/2306.06622
 ---
 We propose a weakly-supervised visual question answer generation method that generates a relevant question-answer pairs for a given input image and associated caption.

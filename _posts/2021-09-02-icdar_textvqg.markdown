@@ -6,7 +6,7 @@ image: images/textvqg.png
 categories: research
 author: "Soumya Shamarao Jahagirdar"
 authors: "<strong>Soumya Shamarao Jahagirdar</strong>,  Shankar Gangisetty, Anand Mishra"
-venue: "International Conference on Document Analysis and Recognition, ICDAR"
+venue: "International Conference on Document Analysis and Recognition, <strong> (ICDAR) </strong>"
 arxiv: https://arxiv.org/pdf/2211.12950.pdf
 code: https://github.com/soumyasj/textVQG
 website: https://sites.google.com/site/shankarsetty/research/textvqg
