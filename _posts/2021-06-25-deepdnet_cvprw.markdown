@@ -2,7 +2,7 @@
 layout: post
 title:  "DeepDNet: Deep Dense Network for Depth Completion Task"
 date:   2021-06-25 22:21:59 +00:00
-# image: /images/deepdnet.png
+image: images/deepdnet.png
 categories: research
 author: "Soumya Shamarao Jahagirdar"
 authors: Girish Hegde, Tushar "<strong>Soumya Shamarao Jahagirdar</strong>, Vaishakh Nargund, Ramesh Ashok Tabib, Uma Mudenagudi, Basavaraja Vandrotti, Ankit Dhiman"

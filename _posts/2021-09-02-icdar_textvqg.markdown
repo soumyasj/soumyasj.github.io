@@ -2,7 +2,7 @@
 layout: post
 title:  "Look, Read and Ask: Learning to Ask Questions by Reading Text in Images"
 date:   2021-09-02 22:21:59 +00:00
-# image: /images/hands2015.png
+image: images/textvqa.png
 categories: research
 author: "Soumya Shamarao Jahagirdar"
 authors: "<strong>Soumya Shamarao Jahagirdar</strong>,  Shankar Gangisetty, Anand Mishra"
