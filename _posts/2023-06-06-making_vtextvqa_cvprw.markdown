@@ -7,6 +7,6 @@ categories: research
 author: "Soumya Shamarao Jahagirdar"
 authors: "Shamanthak Hegde, <strong>Soumya Shamarao Jahagirdar</strong>, Shankar Gangisetty"
 venue: "Conference on Computer Vision and Pattern Recognition <strong> (CVPR) </strong> Workshops, ODRUM"
-paper: https://openaccess.thecvf.com/content/CVPR2023W/O-DRUM/html/Hegde_Making_the_V_in_Text-VQA_Matter_CVPRW_2023_paper.html
+arxiv: https://openaccess.thecvf.com/content/CVPR2023W/O-DRUM/html/Hegde_Making_the_V_in_Text-VQA_Matter_CVPRW_2023_paper.html
 ---
 We propose a method to learn visual features (making V matter in TextVQA) along with the OCR features and question features using VQA dataset as external knowledge for Text-based VQA.
