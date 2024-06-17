@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Prompt2LVideos: Exploring Prompts for Understanding Long-Form Multimodal Videos"
-date:   2024-17-06 22:21:59 +00:00
+date:   2024-06-06 22:21:59 +00:00
 image: images/cvip.png
 categories: research
 author: "Soumya Shamarao Jahagirdar"
