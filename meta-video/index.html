@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="Meta-Video: Efficient Standardized Evaluation for Video Understanding. A compact 1,000-question video benchmark that preserves model rankings at 5x less compute, and a standardized evaluation protocol built on lmms-eval.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Meta-Video: Efficient Standardized Evaluation for Video Understanding</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    @media screen and (max-width: 768px) {
+      .publication-links, .download-buttons {
+        flex-direction: column !important;
+        gap: 8px !important;
+      }
+    }
+    .publication-links, .download-buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+    }
+    .figcap {
+      font-size: 0.92em;
+      color: #555;
+      margin-top: 0.6em;
+      text-align: center;
+    }
+    .hl {
+      background: linear-gradient(transparent 0%, #fff9c4 100%);
+    }
+    .tablewrap {
+      overflow-x: auto;
+      margin: 1em 0;
+    }
+    table.results {
+      margin: 0 auto;
+      font-size: 0.85em;
+      border-collapse: collapse;
+      white-space: nowrap;
+    }
+    table.results th, table.results td {
+      text-align: center;
+      vertical-align: middle;
+      padding: 0.25em 0.55em;
+      border-bottom: 1px solid #eee;
+    }
+    table.results thead th {
+      border-bottom: 2px solid #333;
+    }
+    table.results th[rowspan] {
+      text-align: left;
+      border-right: 1px solid #ddd;
+    }
+    table.results td.metav {
+      background: #e8f0fe;
+    }
+    table.results tr.rep td {
+      background: #f2f2f2;
+      color: #555;
+      font-style: italic;
+    }
+    table.results tr.rep td.metav {
+      background: #e4e9f0;
+    }
+    .cfg {
+      display: inline-block;
+      padding: 0 0.35em;
+      border-radius: 3px;
+      font-weight: bold;
+    }
+    .cfg-green { background: #DCFCE7; }
+    .cfg-orange { background: #FFE5CC; }
+    .cfg-blue { background: #DBEAFE; }
+    .finding {
+      border-left: 4px solid #2f6fdb;
+      padding: 0.3em 0.9em;
+      margin: 0.8em 0;
+      background: #f7f9fd;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar" role="navigation" aria-label="main navigation" style="background-color: #f8f9fa; padding: 0rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1); overflow-x: auto;">
+    <div class="container is-max-desktop">
+      <div class="navbar-brand" style="display: flex; justify-content: center; width: 100%;">
+        <a class="navbar-item" href="#abstract" style="font-weight: bold;">Abstract</a>
+        <a class="navbar-item" href="#problem" style="font-weight: bold;">The Problem</a>
+        <a class="navbar-item" href="#protocol" style="font-weight: bold;">Evaluation Protocol</a>
+        <a class="navbar-item" href="#metav" style="font-weight: bold;">Meta-Video</a>
+        <a class="navbar-item" href="#results" style="font-weight: bold;">Results</a>
+        <a class="navbar-item" href="#usage" style="font-weight: bold;">How To Use</a>
+        <a class="navbar-item" href="#cite" style="font-weight: bold;">Cite Us!</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title publication-title" style="font-size: 2.5rem;">Meta-Video: Efficient Standardized Evaluation<br>for Video Understanding</h1>
+            <h3 style="margin-top: -0.5em; font-weight: normal; font-size: 1.2em; text-align: center;">Under review, ICLR 2027</h3>
+
+            <!-- Double-blind submission: author block is filled in after the review period. -->
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">Anonymous Authors</span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links" style="margin-bottom: 0;">
+                <span class="link-block">
+                  <a href="#" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fas fa-file-alt"></i></span>
+                    <span>paper (soon)</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="#" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="ai ai-arxiv"></i></span>
+                    <span>arXiv (soon)</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="https://github.com/anymz1234/lmms_eval_video" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fab fa-github"></i></span>
+                    <span>code: lmms_eval_video</span>
+                  </a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hero teaser">
+    <div class="container is-max-desktop">
+      <div class="hero-body">
+        <div class="columns is-centered">
+          <div class="column is-12">
+            <img src="static/images/pipeline.png" alt="Evaluation pipeline: inference and decoding, frame extraction, model input" style="width: 100%; max-width: 1200px; margin: 0 auto; display: block;">
+            <p class="figcap"><strong>Evaluation framework.</strong> Nine parameters of the evaluation pipeline that change the reported accuracy of a video understanding model. Bold values mark the reference configuration used throughout.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr style="border: 1px solid #e0e0e0; margin: 20px auto; width: 50%;">
+
+  <section class="section pt-0" id="abstract">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3 has-text-centered" style="padding-top: 20px;">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              Video understanding benchmarks are the primary yardstick for measuring progress in video-language modeling, and a growing body of work relies on them to claim improvements. The reported benchmark scores in these works, however, are almost always produced by frameworks (e.g., <code>lmms_eval</code>) used as <em>black boxes</em>: certain evaluation choices like frame sampling, preprocessing, and input formatting are inherited from preset defaults and seldom inspected carefully.
+              <span class="hl"><strong>We show these unexamined choices are a major source of variance. Even for the same model checkpoint, evaluation configuration alone can shift accuracy by up to 19.5pp.</strong></span>
+              Hence, it is unclear whether reported gains reflect genuine improvements in capability or differences in evaluation setup. Moreover, many benchmark samples offer little evidence of visual capability, since they can be answered <em>without</em> the video, and the full suites are expensive to evaluate.
+              We address these issues in two parts. First, we curate existing suites for discriminability and efficiency, producing <span class="hl"><strong>Meta-Video, a balanced 1,000-question benchmark over 791 videos spanning diverse tasks and durations, which preserves model rankings, at 5&times; inference speedup.</strong></span>
+              Second, we establish a standardized evaluation protocol by sweeping the configuration space to isolate choices that measurably affect results, distill them into best practices and reporting standards, and release reproducible reference scores across five models and seven benchmarks.
+              We hope that the proposed evaluation framework and the Meta-Video benchmark will support video understanding research by providing a reproducible and efficient foundation to measure progress in a reliable way.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr style="border: 1px solid #e0e0e0; margin: 20px auto; width: 50%;">
+
+  <section class="section pt-0" id="problem">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3 has-text-centered" style="padding-top: 20px;">The Problem: Same Checkpoint, Different Scores</h2>
+          <div class="content has-text-justified">
+            <p>
+              Recent papers report scores for the <em>same</em> Qwen2.5-VL-7B and Qwen3-VL-8B checkpoints that differ by far more than the 2&ndash;5pp gains those papers claim over the base model. The range of reported baseline scores per benchmark (Max &Delta;) across more than twenty recent video reasoning papers:
+            </p>
+            <div class="tablewrap">
+              <table class="results">
+                <thead>
+                  <tr><th>Base model</th><th>Video-MME</th><th>TempCompass</th><th>MVBench</th><th>LongVideoBench</th><th>LVBench</th><th>VideoMMMU</th><th>MMVU</th><th>VSI-Bench</th></tr>
+                </thead>
+                <tbody>
+                  <tr><th>Qwen2.5-VL-7B, Max &Delta;</th><td><b>19.5</b></td><td>5.0</td><td>10.6</td><td>8.8</td><td>11.1</td><td>6.8</td><td>17.7</td><td>8.6</td></tr>
+                  <tr><th>Qwen3-VL-8B, Max &Delta;</th><td>8.1</td><td>&ndash;</td><td>1.1</td><td>13.5</td><td><b>19.3</b></td><td>3.5</td><td>&ndash;</td><td>&ndash;</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>
+              Several methods report gains over the Qwen2.5-VL-7B baseline that fall <em>below</em> our reproduction of the same baseline. When we re-evaluate three RL-based video reasoning models under identical settings, none of them improves consistently over the base model across frame counts:
+            </p>
+            <div class="columns is-centered">
+              <div class="column is-8">
+                <img src="static/images/videomme_no_gain.png" alt="Video-MME: no consistent gain over Qwen2.5-VL-7B" style="width: 100%;">
+                <p class="figcap">Accuracy difference of Video-R1, VideoChat-R1.5 and Video-R2 to their Qwen2.5-VL-7B base model on Video-MME, under one fixed protocol, at 16 to 128 frames.</p>
+              </div>
+            </div>
+            <p>
+              A reliable evaluation that supports fast model development therefore needs <strong>(1)</strong> a clean set of benchmark samples, <strong>(2)</strong> low evaluation cost while preserving rankings, and <strong>(3)</strong> a standardized evaluation protocol. Meta-Video addresses (1) and (2); the protocol and evaluation cards address (3).
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr style="border: 1px solid #e0e0e0; margin: 20px auto; width: 50%;">
+
+  <section class="section pt-0" id="protocol">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3 has-text-centered" style="padding-top: 20px;">Standardizing Evaluations for Video Understanding</h2>
+          <div class="content has-text-justified">
+            <p>
+              We fix a reference configuration (bold in the figure at the top) and vary one factor at a time on Qwen2.5-VL-7B over Video-MME, TempCompass, MVBench, LongVideoBench and Meta-Video. What we found:
+            </p>
+
+            <div class="finding"><span class="cfg cfg-green">Inference backend</span> and <span class="cfg cfg-green">Batch size</span><br>
+              Scores within one backend are stable (mean std. 0.15pp across batch sizes 1&ndash;32), but HF and vLLM differ by 4&ndash;6pp on TempCompass, MVBench and Meta-Video (about 24% vs. 30% on Meta-Video). The cause: the evaluated vLLM path converts video input into individual images and bypasses the Qwen models' spatiotemporal pooling. Our implementation restores the pooling and aligns vLLM preprocessing with HF. Batch size itself has little effect on aggregate scores but should be reported.</div>
+
+            <div class="finding"><span class="cfg cfg-orange">Number of frames</span> and <span class="cfg cfg-orange">Frame sampling</span><br>
+              Going from 4 to 128 uniformly sampled frames raises Video-MME from 50.0% to 65.5% and Meta-Video from 24.8% to 40.8%; TempCompass and MVBench saturate or reverse beyond 64 frames. Sampling at 1 fps instead of uniformly costs 3.4&ndash;5.0pp on the short clips of TempCompass and MVBench. The evaluated lmms_eval exposes a maximum frame count that its backends do not enforce (causing out-of-memory on long videos); our implementation enforces it.</div>
+
+            <div class="finding"><span class="cfg cfg-orange">Video decoder</span> and <span class="cfg cfg-orange">Frame resolution</span><br>
+              decord, torchvision and torchcodec extract different frames at the same settings. The decoder changes scores (torchvision drops MVBench by 10pp and TempCompass by 7pp) but not the model ranking. Frame resolution (200k to 602k max pixels) changes scores by under 1pp.</div>
+
+            <div class="finding"><span class="cfg cfg-blue">Input modality</span><br>
+              Pre-extracted <code>.jpg</code> frames beat <code>.mp4</code> input at low frame counts (+5.0pp on TempCompass at 4 frames) but flatten or reverse at high ones: at 128 frames on MVBench, image input scores 60.6% vs. 68.0% for video input and takes 2,329 instead of 1,095 minutes. Video input goes through spatiotemporal pooling, which halves the visual-token count.</div>
+
+            <div class="finding"><span class="cfg cfg-blue">Prompt</span> and <span class="cfg cfg-blue">Decoding temperature</span><br>
+              A prompt that asks for a single letter and nothing else beats the lmms_eval default by 2.5pp (video input) and 1.2pp (image input) on Meta-Video; a step-by-step prompt is worse on average. Prompt layout (VT, TVT, VTV) moves the score by under 0.6pp. Temperature 0 is best; on Video-MME, accuracy falls from 50.0% at T=0 to 44.9% at T=1.</div>
+
+            <h4 class="title is-5 has-text-centered" style="margin-top: 2rem; margin-bottom: 1rem;">Best practice: evaluation cards</h4>
+            <p>
+              Inspired by dataset cards, every table in the paper comes with an <strong>evaluation card</strong> that records the full configuration behind its numbers: backend, batch size, number of frames, sampling strategy, decoder, max pixels, input modality, prompt and temperature. We recommend reporting these alongside any new video benchmark result.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr style="border: 1px solid #e0e0e0; margin: 20px auto; width: 50%;">
+
+  <section class="section pt-0" id="metav">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3 has-text-centered" style="padding-top: 20px;">Meta-Video: An Efficient and Discriminative Benchmark</h2>
+          <div class="content has-text-justified">
+            <p>
+              Evaluating video models across multiple benchmarks and configurations is expensive, and questions that models answer without visual input inflate scores and obscure differences between models. Meta-Video is a compact benchmark of <strong>1,000 question-answer pairs over 791 videos</strong>, selected from the evaluation sets of
+              <a href="https://arxiv.org/abs/2405.21075" target="_blank">Video-MME</a>,
+              <a href="https://arxiv.org/abs/2407.15754" target="_blank">LongVideoBench</a>,
+              <a href="https://arxiv.org/abs/2406.08035" target="_blank">LVBench</a>,
+              <a href="https://arxiv.org/abs/2411.10979" target="_blank">VideoMMMU</a> and
+              <a href="https://arxiv.org/abs/2412.14171" target="_blank">VSI-Bench</a>.
+            </p>
+            <p>
+              <strong>Construction.</strong> To filter questions answerable without visual input, we replace all frames with black frames and evaluate Qwen2.5-VL-7B-Instruct, Qwen3-VL-8B-Instruct and InternVL3.5-8B. Every question that all three models answer correctly is discarded. We then sample question-answer pairs from the remaining questions in each source benchmark, balanced across sources, video durations and question categories.
+            </p>
+            <p>
+              <strong>Question types.</strong> 937 questions are multiple-choice and 63 require a numerical free-form answer. 564 questions have four options, 185 five, and 170 more than five (157 with exactly ten). Correct answers are evenly spread across options: random guessing scores 20.3 and always picking the most frequent option scores 23.3.
+            </p>
+            <p>
+              <strong>Video duration.</strong> Videos run up to one hour: 335 short (&lt;5 min), 281 medium (5&ndash;20 min) and 175 long (20&ndash;60 min). Benchmarks described as "long video" differ widely: videos average 41.1 min in the Video-MME long split, 7.9 min in LongVideoBench and 67.3 min in LVBench.
+            </p>
+            <div class="columns is-centered is-multiline">
+              <div class="column is-6">
+                <img src="static/images/sunburst_categories.png" alt="Source benchmarks and their categories" style="width: 100%;">
+                <p class="figcap">Source benchmarks and their categories.</p>
+              </div>
+              <div class="column is-6">
+                <img src="static/images/sunburst_qtypes.png" alt="Question types within each source benchmark" style="width: 100%;">
+                <p class="figcap">Question types within each source benchmark.</p>
+              </div>
+              <div class="column is-6">
+                <img src="static/images/answer_letters.png" alt="Distribution of correct answer letters" style="width: 100%;">
+                <p class="figcap">Distribution of correct answer letters per benchmark.</p>
+              </div>
+              <div class="column is-6">
+                <img src="static/images/durations.png" alt="Video duration distribution" style="width: 100%;">
+                <p class="figcap">Video duration distribution on Meta-Video.</p>
+              </div>
+            </div>
+            <p>
+              Scores on Meta-Video are lower than on the source benchmarks by construction, since the questions that language priors solve are gone. Compare models by rank and by Meta-Video score, not against published numbers.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr style="border: 1px solid #e0e0e0; margin: 20px auto; width: 50%;">
+
+  <section class="section pt-0" id="results">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full">
+          <h2 class="title is-3 has-text-centered" style="padding-top: 20px;">Results</h2>
+          <div class="content has-text-justified">
+            <h4 class="title is-5 has-text-centered" style="margin-bottom: 1rem;">Standardized comparison of five open models</h4>
+            <p>
+              Five models at 4 to 128 frames on six source benchmarks and on Meta-Video, under one fixed protocol (uniform sampling, HF backend, torchcodec, 602k max pixels, <code>.mp4</code> input, batch size 1, temperature 0; one tile per frame for InternVL3.5). Avg. is the mean over the seven source benchmarks. The grey rows reproduce the numbers reported in each model's paper. Bold marks the best frame budget per model and column.
+            </p>
+            <div class="tablewrap">
+              <table class="results">
+                <thead>
+                  <tr>
+                    <th>Model</th><th>#Frames</th><th>Video-MME</th><th>LongVideoBench</th><th>TempCompass</th><th>MMVU (val)</th><th>LVBench</th><th>MLVU</th><th>VSI-Bench</th><th>Avg.</th>
+                    <th class="metav">Meta-V short</th><th class="metav">Meta-V medium</th><th class="metav">Meta-V long</th><th class="metav"><b>Meta-V</b></th>
+                  </tr>
+                </thead>
+                <tbody>
+<tr><th rowspan="7">InternVL3.5-4B</th><td>4</td><td>54.5</td><td>52.1</td><td>69.1</td><td>46.4</td><td>38.0</td><td>59.5</td><td>46.3</td><td>52.3</td><td class="metav">35.4</td><td class="metav">24.2</td><td class="metav">32.3</td><td class="metav">30.6</td></tr>
+<tr><td>8</td><td>57.7</td><td>54.5</td><td>68.9</td><td>46.7</td><td>38.9</td><td>60.6</td><td>50.6</td><td>54.0</td><td class="metav">45.0</td><td class="metav">32.7</td><td class="metav">35.1</td><td class="metav">37.6</td></tr>
+<tr><td>16</td><td>60.7</td><td>56.8</td><td>71.1</td><td>48.6</td><td>41.7</td><td>63.4</td><td>55.1</td><td>56.8</td><td class="metav">50.4</td><td class="metav">36.2</td><td class="metav">37.9</td><td class="metav">41.5</td></tr>
+<tr><td>32</td><td>63.1</td><td>58.3</td><td><b>71.3</b></td><td><b>50.8</b></td><td>42.6</td><td>67.1</td><td>56.8</td><td>58.6</td><td class="metav"><b>53.9</b></td><td class="metav">41.2</td><td class="metav">41.5</td><td class="metav"><b>45.5</b></td></tr>
+<tr><td>64</td><td><b>64.8</b></td><td><b>59.1</b></td><td>69.8</td><td>49.9</td><td>43.1</td><td>67.7</td><td><b>57.3</b></td><td><b>58.8</b></td><td class="metav">52.7</td><td class="metav">41.1</td><td class="metav">40.1</td><td class="metav">44.6</td></tr>
+<tr><td>128</td><td>64.1</td><td>58.8</td><td>68.9</td><td>49.3</td><td><b>44.7</b></td><td><b>68.4</b></td><td>54.7</td><td>58.4</td><td class="metav">48.1</td><td class="metav"><b>41.4</b></td><td class="metav"><b>42.2</b></td><td class="metav">43.9</td></tr>
+<tr class="rep"><td>reported</td><td>65.4</td><td>60.8</td><td>–</td><td>–</td><td>–</td><td>70.4</td><td>–</td><td>–</td><td class="metav">–</td><td class="metav">–</td><td class="metav">–</td><td class="metav">–</td></tr>
+<tr><th rowspan="7">Qwen3-VL-4B</th><td>4</td><td>49.0</td><td>51.5</td><td>67.8</td><td>48.5</td><td>32.5</td><td>52.7</td><td>39.1</td><td>48.7</td><td class="metav">33.0</td><td class="metav">21.4</td><td class="metav">31.4</td><td class="metav">28.6</td></tr>
+<tr><td>8</td><td>52.9</td><td>54.4</td><td>69.4</td><td>51.8</td><td>35.4</td><td>55.0</td><td>46.2</td><td>52.2</td><td class="metav">42.5</td><td class="metav">30.5</td><td class="metav">36.1</td><td class="metav">36.4</td></tr>
+<tr><td>16</td><td>57.0</td><td>59.0</td><td>70.3</td><td>51.4</td><td>37.2</td><td>58.1</td><td>50.8</td><td>54.8</td><td class="metav">52.2</td><td class="metav">42.7</td><td class="metav">37.9</td><td class="metav">44.3</td></tr>
+<tr><td>32</td><td>61.4</td><td>60.2</td><td><b>70.9</b></td><td>52.7</td><td>40.9</td><td>62.5</td><td>54.6</td><td>57.6</td><td class="metav">58.6</td><td class="metav">49.6</td><td class="metav">41.8</td><td class="metav">50.0</td></tr>
+<tr><td>64</td><td>64.1</td><td>61.3</td><td>70.6</td><td>53.2</td><td>40.5</td><td>66.1</td><td>57.6</td><td>59.1</td><td class="metav">61.7</td><td class="metav">53.5</td><td class="metav"><b>43.2</b></td><td class="metav">52.8</td></tr>
+<tr><td>128</td><td><b>67.5</b></td><td><b>64.0</b></td><td>69.9</td><td><b>53.4</b></td><td><b>43.8</b></td><td><b>70.4</b></td><td><b>58.9</b></td><td><b>61.1</b></td><td class="metav"><b>67.3</b></td><td class="metav"><b>57.1</b></td><td class="metav">41.4</td><td class="metav"><b>55.3</b></td></tr>
+<tr class="rep"><td>reported</td><td>69.3</td><td>–</td><td>–</td><td>50.5</td><td>56.2</td><td>75.3</td><td>–</td><td>–</td><td class="metav">–</td><td class="metav">–</td><td class="metav">–</td><td class="metav">–</td></tr>
+<tr><th rowspan="7">Qwen2.5-VL-7B</th><td>4</td><td>50.1</td><td>50.3</td><td>64.5</td><td>46.2</td><td>28.1</td><td>51.9</td><td>26.8</td><td>45.4</td><td class="metav">26.7</td><td class="metav">22.7</td><td class="metav">25.1</td><td class="metav">24.8</td></tr>
+<tr><td>8</td><td>53.4</td><td>52.7</td><td>70.4</td><td>48.4</td><td>33.1</td><td>54.5</td><td>30.5</td><td>49.0</td><td class="metav">30.2</td><td class="metav">26.6</td><td class="metav">27.9</td><td class="metav">28.2</td></tr>
+<tr><td>16</td><td>58.1</td><td>56.2</td><td>71.8</td><td>50.8</td><td>34.7</td><td>56.3</td><td>33.5</td><td>51.6</td><td class="metav">35.1</td><td class="metav">36.0</td><td class="metav">29.0</td><td class="metav">33.4</td></tr>
+<tr><td>32</td><td>61.4</td><td>58.7</td><td>73.3</td><td>49.7</td><td>37.4</td><td>59.5</td><td>36.7</td><td>53.8</td><td class="metav">42.1</td><td class="metav">33.3</td><td class="metav">29.3</td><td class="metav">34.9</td></tr>
+<tr><td>64</td><td>63.5</td><td><b>60.2</b></td><td><b>74.2</b></td><td>51.8</td><td>39.3</td><td>63.4</td><td>37.7</td><td>55.7</td><td class="metav">44.9</td><td class="metav">40.1</td><td class="metav">33.6</td><td class="metav">39.5</td></tr>
+<tr><td>128</td><td><b>65.6</b></td><td><b>60.2</b></td><td>73.4</td><td><b>51.9</b></td><td><b>42.1</b></td><td><b>66.1</b></td><td><b>38.3</b></td><td><b>56.8</b></td><td class="metav"><b>46.1</b></td><td class="metav"><b>41.3</b></td><td class="metav"><b>34.3</b></td><td class="metav"><b>40.6</b></td></tr>
+<tr class="rep"><td>reported</td><td>65.1</td><td>56.0</td><td>71.7</td><td>50.1</td><td>45.3</td><td>70.2</td><td>–</td><td>–</td><td class="metav">–</td><td class="metav">–</td><td class="metav">–</td><td class="metav">–</td></tr>
+<tr><th rowspan="7">InternVL3.5-8B</th><td>4</td><td>56.7</td><td>55.0</td><td>69.4</td><td>55.7</td><td>38.7</td><td>58.2</td><td>47.2</td><td>54.4</td><td class="metav">38.3</td><td class="metav">31.4</td><td class="metav">35.3</td><td class="metav">35.0</td></tr>
+<tr><td>8</td><td>60.0</td><td>56.4</td><td>70.2</td><td>55.4</td><td>39.6</td><td>62.5</td><td>50.3</td><td>56.3</td><td class="metav">46.5</td><td class="metav">40.7</td><td class="metav">41.3</td><td class="metav">42.8</td></tr>
+<tr><td>16</td><td>63.0</td><td>57.5</td><td>70.6</td><td>57.7</td><td>40.6</td><td>63.7</td><td>55.1</td><td>58.3</td><td class="metav">50.4</td><td class="metav">46.1</td><td class="metav">43.5</td><td class="metav">46.7</td></tr>
+<tr><td>32</td><td>64.7</td><td>59.9</td><td><b>70.8</b></td><td>56.4</td><td>41.8</td><td>67.7</td><td><b>55.9</b></td><td>59.6</td><td class="metav">56.0</td><td class="metav">48.3</td><td class="metav">47.0</td><td class="metav">50.4</td></tr>
+<tr><td>64</td><td><b>66.2</b></td><td><b>62.9</b></td><td>70.5</td><td><b>59.9</b></td><td>43.8</td><td><b>68.5</b></td><td>55.8</td><td><b>61.1</b></td><td class="metav"><b>59.1</b></td><td class="metav">50.9</td><td class="metav">46.3</td><td class="metav">52.1</td></tr>
+<tr><td>128</td><td>65.1</td><td>61.6</td><td>70.1</td><td>58.3</td><td><b>46.2</b></td><td><b>68.5</b></td><td>54.2</td><td>60.6</td><td class="metav">55.1</td><td class="metav"><b>51.2</b></td><td class="metav"><b>50.5</b></td><td class="metav"><b>52.3</b></td></tr>
+<tr class="rep"><td>reported</td><td>66.0</td><td>62.1</td><td>–</td><td>–</td><td>–</td><td>70.2</td><td>–</td><td>–</td><td class="metav">–</td><td class="metav">–</td><td class="metav">–</td><td class="metav">–</td></tr>
+<tr><th rowspan="7">Qwen3-VL-8B</th><td>4</td><td>53.0</td><td>52.2</td><td>70.7</td><td>53.8</td><td>33.6</td><td>53.0</td><td>41.4</td><td>51.1</td><td class="metav">37.1</td><td class="metav">28.8</td><td class="metav">41.7</td><td class="metav">35.9</td></tr>
+<tr><td>8</td><td>56.1</td><td>55.9</td><td>72.3</td><td>56.7</td><td>36.0</td><td>54.7</td><td>47.5</td><td>54.2</td><td class="metav">44.6</td><td class="metav">36.9</td><td class="metav">44.2</td><td class="metav">41.9</td></tr>
+<tr><td>16</td><td>60.3</td><td>58.0</td><td>73.2</td><td>58.4</td><td>37.4</td><td>59.2</td><td>51.4</td><td>56.8</td><td class="metav">56.4</td><td class="metav">44.7</td><td class="metav">49.8</td><td class="metav">50.3</td></tr>
+<tr><td>32</td><td>64.6</td><td>59.5</td><td><b>74.4</b></td><td><b>59.5</b></td><td>39.8</td><td>63.1</td><td>55.8</td><td>59.5</td><td class="metav">61.5</td><td class="metav">51.9</td><td class="metav">51.6</td><td class="metav">55.0</td></tr>
+<tr><td>64</td><td>66.5</td><td>63.0</td><td>73.2</td><td>58.5</td><td>42.9</td><td>68.2</td><td>59.0</td><td>61.6</td><td class="metav"><b>65.5</b></td><td class="metav">55.8</td><td class="metav">50.9</td><td class="metav">57.4</td></tr>
+<tr><td>128</td><td><b>69.2</b></td><td><b>63.6</b></td><td>74.2</td><td>58.7</td><td><b>46.5</b></td><td><b>72.1</b></td><td><b>59.7</b></td><td><b>63.4</b></td><td class="metav">62.5</td><td class="metav"><b>60.9</b></td><td class="metav"><b>53.4</b></td><td class="metav"><b>58.9</b></td></tr>
+<tr class="rep"><td>reported</td><td>71.4</td><td>–</td><td>–</td><td>58.7</td><td>58.0</td><td>78.1</td><td>–</td><td>–</td><td class="metav">–</td><td class="metav">–</td><td class="metav">–</td><td class="metav">–</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>
+              Qwen3-VL is the strongest backbone in both the 4B and the 7&ndash;8B range. Frame count changes rankings: the Qwen models improve almost monotonically up to 128 frames, whereas InternVL3.5 peaks at 32&ndash;64 frames and then declines. InternVL3.5-4B beats Qwen3-VL-4B at every frame count up to 32; the order flips at 64 frames and at 128 frames Qwen3-VL-4B leads by 2.9pp. Meta-Video reproduces these trends at a fraction of the cost.
+            </p>
+
+            <h4 class="title is-5 has-text-centered" style="margin-top: 2.5rem; margin-bottom: 1rem;">Where to spend compute on Meta-Video</h4>
+            <p>
+              On the 1,000-item split with one L40S, batch size 1, and end-to-end GPU-seconds per item on the x-axis:
+            </p>
+            <div class="columns is-centered is-multiline">
+              <div class="column is-12">
+                <img src="static/images/takeaway_1.png" alt="More frames beat sharper frames" style="width: 100%;">
+                <p class="figcap"><strong>More frames beat sharper frames.</strong> At equal compute, more frames at lower resolution win by 2.6pp (Qwen2.5-VL-7B) and 1.0pp (Qwen3-VL-8B).</p>
+              </div>
+              <div class="column is-12">
+                <img src="static/images/takeaway_2.png" alt="Longer answers cost more and do not help" style="width: 100%;">
+                <p class="figcap"><strong>Longer answers cost more and do not help.</strong> Step-by-step reasoning with a 1,024-token cap costs 1.5&ndash;1.9&times; and changes the score by &minus;0.2 and &minus;3.3pp.</p>
+              </div>
+              <div class="column is-12">
+                <img src="static/images/takeaway_3.png" alt="Frames vs repeated sampling" style="width: 100%;">
+                <p class="figcap"><strong>Extra compute is worth more as frames than as repeated sampling.</strong> From greedy decoding at 32 frames, 5&times; compute yields +0.5 / &minus;0.8pp through majority voting but +4.4 / +5.1pp through more frames.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr style="border: 1px solid #e0e0e0; margin: 20px auto; width: 50%;">
+
+  <section class="section pt-0" id="usage">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3 has-text-centered" style="padding-top: 20px;">How To Use</h2>
+          <div class="content has-text-justified">
+            <p>
+              <code>lmms_eval_video</code> is a fork of <a href="https://github.com/EvolvingLMMs-Lab/lmms-eval" target="_blank">lmms-eval</a> with the vLLM video fix, an enforced frame cap, and Meta-Video in-tree as the task <code>metav</code>. It runs like any lmms-eval task:
+            </p>
+            <pre><code>git clone https://github.com/anymz1234/lmms_eval_video
+cd lmms_eval_video && pip install -e .
+
+python -m lmms_eval --model qwen2_5_vl \
+    --model_args pretrained=Qwen/Qwen2.5-VL-7B-Instruct,max_num_frames=32 \
+    --tasks metav --batch_size 1 --log_samples --output_path logs/metav_try
+
+# Meta-Video score = macro average over the 5 sources
+python eval_scripts/score_metav.py --write logs/metav_try/*/*_results.json</code></pre>
+            <p>Each source is also a subtask (<code>metav_videomme</code>, <code>metav_longvideobench_val_v</code>, <code>metav_lvbench</code>, <code>metav_video_mmmu_*</code>, <code>metav_vsibench</code>) and re-uses its source task's loader, parser and metric, so every item is scored exactly as in its benchmark. The items live in <code>lmms_eval/tasks/metav/data/</code>: <code>metav.jsonl</code> (question, options, answer, video, duration, source ids, categories), <code>metav_ids.json</code> and <code>metav_prompts.json</code>.</p>
+            <p>The protocol sweeps are one command each:</p>
+            <pre><code>bash eval_scripts/sweep_params.sh --model qwen25vl_7b --task videomme        # one knob at a time: backend, batch, decoder, sampling, frames, pixels, modality, temperature
+bash eval_scripts/sweep_frames.sh --model qwen3vl_8b                           # accuracy vs 4..128 frames, .mp4 and .jpg
+bash eval_scripts/sweep_vllm_fix.sh --model Qwen/Qwen2.5-VL-7B-Instruct --task metav   # HF vs stock vLLM vs fixed vLLM
+python eval_scripts/collect_results.py --csv runs.csv</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr style="border: 1px solid #e0e0e0; margin: 20px auto; width: 50%;">
+
+  <section class="section pt-0" id="license">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3 has-text-centered" style="padding-top: 20px;">License</h2>
+          <div class="content has-text-justified">
+            <p>
+              The code follows the lmms-eval license. The Meta-Video item lists and prompts are released under <strong>CC BY 4.0</strong>:
+              <a href="http://creativecommons.org/licenses/by/4.0" target="_blank">http://creativecommons.org/licenses/by/4.0</a>
+            </p>
+            <p>
+              <em>Note:</em> The videos belong to the source benchmarks (Video-MME, LongVideoBench, LVBench, VideoMMMU, VSI-Bench) and are subject to their own licensing terms. Please ensure compliance with the original dataset licenses.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr style="border: 1px solid #e0e0e0; margin: 20px auto; width: 50%;">
+
+  <section class="section pt-0" id="cite">
+    <div class="container is-max-desktop content">
+      <h2 class="title has-text-centered" style="padding-top: 20px;">BibTeX</h2>
+      <pre class="selectable"><code>@inproceedings{metavideo2027,
+  title={Meta-Video: Efficient Standardized Evaluation for Video Understanding},
+  author={Anonymous},
+  booktitle={Under review},
+  year={2027}
+}</code></pre>
+    </div>
+  </section>
+
+  <footer class="footer pt-0 pb-0">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p>
+              Website template based on
+              <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>
+              and <a href="https://utd-project.github.io/">UTD</a>, licensed under
+              <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA-4.0</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
