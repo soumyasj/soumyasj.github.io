@@ -638,23 +638,20 @@
           <h2 class="title is-3 has-text-centered" style="padding-top: 20px;">How To Use</h2>
           <div class="content has-text-justified">
             <p>
-              <code>lmms_eval_video</code> is a fork of <a href="https://github.com/EvolvingLMMs-Lab/lmms-eval" target="_blank">lmms-eval</a> with the vLLM video fix, an enforced frame cap, and Meta-Video in-tree as the task <code>metav</code>. It runs like any lmms-eval task:
+              <code>lmms_eval_video</code> is a fork of <a href="https://github.com/EvolvingLMMs-Lab/lmms-eval" target="_blank">lmms-eval</a> in which every setting that changes what a video model sees lives in <strong>one YAML file</strong>: dataset, model, frames and how they are sampled, decoder, resolution, backend (HF, vLLM, or vLLM with the video fix), batch size, decoding. The runner refuses settings a model wrapper would silently ignore and writes an evaluation card next to every result.
             </p>
             <pre><code>git clone https://github.com/soumyasj/lmms_eval_video
 cd lmms_eval_video && pip install -e .
 
-python -m lmms_eval --model qwen2_5_vl \
-    --model_args pretrained=Qwen/Qwen2.5-VL-7B-Instruct,max_num_frames=32 \
-    --tasks metav --batch_size 1 --log_samples --output_path logs/metav_try
+# Meta-Video, Qwen2.5-VL-7B, 32 frames, HF backend (configs/example.yaml holds every key with its default)
+python eval_scripts/run_eval.py configs/example.yaml
+python eval_scripts/run_eval.py configs/example.yaml --dry_run            # resolved settings + the final lmms_eval command, runs nothing
+python eval_scripts/run_eval.py configs/example.yaml --set model=qwen3vl_8b --set nframes=64
 
-# Meta-Video score = macro average over the 5 sources
-python eval_scripts/score_metav.py --write logs/metav_try/*/*_results.json</code></pre>
-            <p>Each source is also a subtask (<code>metav_videomme</code>, <code>metav_longvideobench_val_v</code>, <code>metav_lvbench</code>, <code>metav_video_mmmu_*</code>, <code>metav_vsibench</code>) and re-uses its source task's loader, parser and metric, so every item is scored exactly as in its benchmark. The items live in <code>lmms_eval/tasks/metav/data/</code>: <code>metav.jsonl</code> (question, options, answer, video, duration, source ids, categories), <code>metav_ids.json</code> and <code>metav_prompts.json</code>.</p>
-            <p>The protocol sweeps are one command each:</p>
-            <pre><code>bash eval_scripts/sweep_params.sh --model qwen25vl_7b --task videomme        # one knob at a time: backend, batch, decoder, sampling, frames, pixels, modality, temperature
-bash eval_scripts/sweep_frames.sh --model qwen3vl_8b                           # accuracy vs 4..128 frames, .mp4 and .jpg
-bash eval_scripts/sweep_vllm_fix.sh --model Qwen/Qwen2.5-VL-7B-Instruct --task metav   # HF vs stock vLLM vs fixed vLLM
-python eval_scripts/collect_results.py --csv runs.csv</code></pre>
+# the paper's standardized comparison: five models x 4..128 frames on Meta-Video
+python eval_scripts/run_eval.py configs/metav_protocol.yaml
+python eval_scripts/score_metav.py --write logs/runs/metav_protocol/metav/*/*/*/*_results.json</code></pre>
+            <p>A config toggles <code>tasks</code>, <code>model</code>, <code>nframes</code>, <code>backend</code> and <code>vllm_fix</code> as lists and fixes everything else; the first Meta-Video run downloads the dataset (questions and videos) from Hugging Face. The repository's <a href="https://github.com/soumyasj/lmms_eval_video/blob/main/DATASETS.md" target="_blank">DATASETS.md</a> and <a href="https://github.com/soumyasj/lmms_eval_video/blob/main/MODELS.md" target="_blank">MODELS.md</a> document every video task (dataset version, split, prompt, metric) and every model family (arguments, how frames become tokens, backends).</p>
           </div>
         </div>
       </div>
