@@ -21,7 +21,6 @@
   <script defer src="./static/js/fontawesome.all.min.js"></script>
   <script src="./static/js/bulma-carousel.min.js"></script>
   <script src="./static/js/bulma-slider.min.js"></script>
-  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
   <style>
     @media screen and (max-width: 768px) {
@@ -63,31 +62,25 @@
     table.results thead th {
       border-bottom: 2px solid #333;
     }
-    table.results th[rowspan] {
-      text-align: left;
-      border-right: 1px solid #ddd;
-    }
-    table.results td.metav {
-      background: #e8f0fe;
-    }
-    table.results tr.rep td {
-      background: #f2f2f2;
-      color: #555;
-      font-style: italic;
-    }
-    table.results tr.rep td.metav {
-      background: #e4e9f0;
-    }
-    table.results th.metav-avg, table.results td.metav-avg {
-      background: #2f6fdb;
-      color: #fff;
-      font-weight: bold;
-      border-left: 2px solid #1d4fa8;
-    }
-    table.results tr.rep td.metav-avg {
-      background: #8fa9d9;
-      color: #fff;
-    }
+    /* Table 1 of the paper */
+    table.t1 { font-size: 0.7em; width: 100%; }
+    table.t1 th, table.t1 td { padding: 0.2em 0.26em; }
+    table.t1 thead th { white-space: normal; line-height: 1.15; vertical-align: bottom; }
+    table.t1 tbody th { white-space: nowrap; text-align: left !important; }
+    table.t1 thead tr:first-child th { border-bottom: 1px solid #999; font-weight: bold; }
+    table.t1 thead tr:first-child th:first-child { border-bottom: none; }
+    table.t1 th.grp2, table.t1 td:nth-child(7) { border-left: 1px solid #ddd; }
+    table.t1 tbody th { text-align: left; font-weight: normal; padding-left: 0.3em; }
+    table.t1 tr.blk th { font-style: italic; color: #444; background: #fafafa; border-bottom: 1px solid #ddd; padding-top: .5em; }
+    table.t1 tr.base th { font-weight: bold; }
+    table.t1 tr.base td { border-bottom: 1px solid #bbb; }
+    table.t1 tr.delta th { font-style: italic; }
+    table.t1 tr.delta th, table.t1 tr.delta td { border-top: 1px solid #bbb; }
+    table.t1 tr.ours th { font-weight: bold; }
+    table.t1 tr.ours th, table.t1 tr.ours td { background: #e8f0fe; }
+    table.t1 sub { font-size: 0.72em; margin-left: 1px; }
+    table.t1 sub.up { color: #1a7f37; }
+    table.t1 sub.down { color: #b42318; }
     .highlight-card {
       display: block;
       height: 100%;
@@ -110,9 +103,55 @@
     .evalcard td:first-of-type { width: 10em; white-space: nowrap; }
     .evalcard tr.ec-sep td, .evalcard tr.ec-sep th { border-top: 1px solid #C9D7EE; }
     .evalcard .ec-hint { color: #888; font-style: italic; }
+
+    /* ---- sensitivity charts (Table 2 of the paper) ---- */
+    .ds-tabs { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin: .8em 0 1em; }
+    .ds-tab { font: inherit; font-size: .9em; font-weight: 600; cursor: pointer; padding: 6px 14px; border-radius: 8px; border: 1px solid #d8dee8; background: #fff; color: #555; }
+    .ds-tab:hover { border-color: #2f6fdb; color: #2f6fdb; }
+    .ds-tab.active { background: #2f6fdb; border-color: #2f6fdb; color: #fff; }
+    .ds-tab.metav.active { background: #1d4fa8; border-color: #1d4fa8; }
+    .knob-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media screen and (max-width: 820px) { .knob-grid { grid-template-columns: 1fr; } }
+    .knob-card { background: #fff; border: 1px solid #e3e8f0; border-radius: 12px; padding: 12px 14px 10px; text-align: left; }
+    .knob-card .kc-title { font-weight: bold; font-size: .98em; margin-bottom: 2px; }
+    .knob-card .kc-fixed { font-size: .76em; color: #777; margin-bottom: 4px; }
+    .knob-card .kc-fixed b { color: #555; font-weight: 600; }
+    .knob-card svg { width: 100%; height: auto; display: block; overflow: visible; font-family: inherit; }
+    .knob-card .kc-legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: .8em; color: #555; margin-top: 2px; }
+    .knob-card .kc-legend span { cursor: pointer; display: inline-flex; align-items: center; gap: 5px; padding: 1px 4px; border-radius: 4px; }
+    .knob-card .kc-legend span:hover, .knob-card .kc-legend span.on { background: #f0f4fb; color: #222; }
+    .knob-card .kc-legend i { display: inline-block; width: 16px; height: 3px; border-radius: 2px; }
+    .knob-card .kc-legend i.dash { height: 0; border-top: 2px dashed #999; }
+    .knob-card .kc-note { font-size: .8em; color: #555; margin-top: 6px; line-height: 1.35; }
+    .knob-card .kc-note b { color: #333; }
+    .kc-axis { fill: #888; font-size: 10px; }
+    .kc-axis-title { fill: #666; font-size: 10.5px; }
+    .kc-grid { stroke: #eceff4; stroke-width: 1; }
+    .kc-ref { stroke: #999; stroke-width: 1.3; stroke-dasharray: 5 4; fill: none; }
+    .kc-series path.line { fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; transition: stroke-width .15s; }
+    .kc-series path.halo { fill: none; stroke: #fff; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+    .kc-series path.hit { fill: none; stroke: transparent; stroke-width: 18; cursor: pointer; }
+    .kc-series circle { stroke: #fff; stroke-width: 1.6; cursor: pointer; transition: r .12s; }
+    .kc-series line.err { opacity: .75; }
+    svg.multi .kc-series text.vl { display: none; }
+    svg.dim .kc-series.on text.vl { display: block; }
+    .kc-series text.vl { font-size: 9.5px; font-weight: bold; paint-order: stroke; stroke: #fff; stroke-width: 3px; stroke-linejoin: round; pointer-events: none; }
+    svg.dim .kc-series { opacity: .18; transition: opacity .15s; }
+    svg.dim .kc-series.on { opacity: 1; }
+    svg.dim .kc-series.on path.line { stroke-width: 3.4; }
+    .kc-best { fill: #d03b3b; stroke: #fff; stroke-width: 1.2; pointer-events: none; }
+    #kc-tip { position: fixed; pointer-events: none; z-index: 60; background: #1f1f1e; color: #fff; font-size: .8em; padding: 6px 9px; border-radius: 6px; opacity: 0; transition: opacity .08s; white-space: nowrap; box-shadow: 0 4px 14px rgba(0,0,0,.3); text-align: left; line-height: 1.35; }
+    #kc-tip b { color: #fff; }
+    #kc-tip .mut { color: #bbb; }
+
+    /* ---- explore graph ---- */
     #graph-wrap { position: relative; width: 100%; }
-    #graph { width: 100%; height: 620px; display: block; border: 1px solid #e3e8f0; border-radius: 10px; background: #fcfdff; cursor: crosshair; }
-    #graph-tip { position: absolute; pointer-events: none; display: none; max-width: 420px; background: #fff; border: 1px solid #ccd; border-radius: 8px; box-shadow: 0 6px 18px rgba(0,0,0,.15); padding: .7em .9em; font-size: .85em; text-align: left; z-index: 10; }
+    #graph { width: 100%; height: 680px; display: block; border: 1px solid #e3e8f0; border-radius: 10px; background: #fcfdff; cursor: crosshair; touch-action: none; }
+    #graph-tip { position: absolute; pointer-events: none; display: none; width: 400px; max-width: 95%; background: #fff; border: 1px solid #ccd; border-radius: 8px; box-shadow: 0 6px 18px rgba(0,0,0,.15); padding: .7em .9em; font-size: .85em; text-align: left; z-index: 10; }
+    #graph-tip video { width: 100%; aspect-ratio: 16 / 9; background: #000; border-radius: 6px; margin-bottom: .5em; display: block; }
+    #graph-tip .film { width: 100%; aspect-ratio: 16 / 9; background: #111 no-repeat 0 0; background-size: 800% 100%; border-radius: 6px; margin-bottom: .5em; position: relative; overflow: hidden; }
+    #graph-tip .film .fbar { position: absolute; left: 0; bottom: 0; height: 3px; background: rgba(255,255,255,.85); width: 0; transition: width .25s linear; }
+    #graph-tip .film .ftime { position: absolute; right: 6px; bottom: 6px; font-size: .78em; color: #fff; background: rgba(0,0,0,.55); padding: 1px 6px; border-radius: 4px; }
     #graph-tip .opt { margin: 0; padding-left: 1.1em; }
     #graph-tip .opt li.ok { font-weight: bold; color: #1a7f37; }
     #graph-tip .meta { color: #666; font-size: .9em; margin-top: .4em; }
@@ -121,6 +160,7 @@
     #graph-legend span.off { opacity: .35; }
     #graph-legend i { display: inline-block; width: 11px; height: 11px; border-radius: 50%; margin-right: 5px; vertical-align: -1px; }
     #graph-pin { position: absolute; right: 10px; top: 10px; font-size: .8em; color: #666; }
+    #graph-hint { position: absolute; left: 10px; top: 10px; font-size: .78em; color: #999; pointer-events: none; }
     .cfg {
       display: inline-block;
       padding: 0 0.35em;
@@ -130,12 +170,6 @@
     .cfg-green { background: #DCFCE7; }
     .cfg-orange { background: #FFE5CC; }
     .cfg-blue { background: #DBEAFE; }
-    .finding {
-      border-left: 4px solid #2f6fdb;
-      padding: 0.3em 0.9em;
-      margin: 0.8em 0;
-      background: #f7f9fd;
-    }
   </style>
 </head>
 
@@ -145,12 +179,11 @@
       <div class="navbar-brand" style="display: flex; justify-content: center; width: 100%;">
         <a class="navbar-item" href="#" style="padding: 0 0.6em;"><img src="static/images/logo.png" alt="" style="height: 28px;"></a>
         <a class="navbar-item" href="#abstract" style="font-weight: bold;">Abstract</a>
-        <a class="navbar-item" href="#problem" style="font-weight: bold;">The Problem</a>
+        <a class="navbar-item" href="#reported" style="font-weight: bold;">Reported vs. Reproduced</a>
         <a class="navbar-item" href="#protocol" style="font-weight: bold;">Evaluation Protocol</a>
         <a class="navbar-item" href="#evalcard" style="font-weight: bold;">Evaluation Cards</a>
         <a class="navbar-item" href="#metav" style="font-weight: bold;">Meta-Video</a>
         <a class="navbar-item" href="#explore" style="font-weight: bold;">Explore</a>
-        <a class="navbar-item" href="#results" style="font-weight: bold;">Results</a>
         <a class="navbar-item" href="#usage" style="font-weight: bold;">How To Use</a>
         <a class="navbar-item" href="#cite" style="font-weight: bold;">Cite Us!</a>
       </div>
@@ -188,15 +221,15 @@
             <div class="column has-text-centered">
               <div class="publication-links" style="margin-bottom: 0;">
                 <span class="link-block">
-                  <a href="https://github.com/soumyasj/lmms_eval_video/blob/main/Meta-Video.pdf" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                  <a href="https://arxiv.org/pdf/2610.18535" target="_blank" class="external-link button is-normal is-rounded is-dark">
                     <span class="icon"><i class="fas fa-file-pdf"></i></span>
                     <span>Paper</span>
                   </a>
                 </span>
                 <span class="link-block">
-                  <a href="#" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                  <a href="https://arxiv.org/abs/2610.18535" target="_blank" class="external-link button is-normal is-rounded is-dark">
                     <span class="icon"><i class="ai ai-arxiv"></i></span>
-                    <span>arXiv (soon)</span>
+                    <span>arXiv</span>
                   </a>
                 </span>
                 <span class="link-block">
@@ -266,7 +299,7 @@
               Video understanding benchmarks are the primary yardstick for measuring progress in video-language modeling, and a growing body of work relies on them to claim improvements. The reported benchmark scores in these works, however, are almost always produced by frameworks (e.g., <code>lmms_eval</code>) used as <em>black boxes</em>: certain evaluation choices like frame sampling, preprocessing, and input formatting are inherited from preset defaults and seldom inspected carefully.
               <span class="hl"><strong>We show these unexamined choices are a major source of variance. Even for the same model checkpoint, evaluation configuration alone can shift accuracy by up to 19.5pp.</strong></span>
               Hence, it is unclear whether reported gains reflect genuine improvements in capability or differences in evaluation setup. Moreover, many benchmark samples offer little evidence of visual capability, since they can be answered <em>without</em> the video, and the full suites are expensive to evaluate.
-              We address these issues in two parts. First, we curate existing suites for discriminability and efficiency, producing <span class="hl"><strong>Meta-Video, a balanced 1,000-question benchmark over 791 videos spanning diverse tasks and durations, which preserves model rankings, at 5&times; inference speedup.</strong></span>
+              We address these issues in two parts. First, we curate existing suites for discriminability and efficiency, producing <span class="hl"><strong>Meta-Video, a balanced 1,000-question benchmark over 791 videos spanning diverse tasks and durations, which largely preserves model rankings, at 5&times; inference speedup</strong></span> for a full frame-count sweep (4&ndash;128 frames).
               Second, we establish a standardized evaluation protocol by sweeping the configuration space to isolate choices that measurably affect results, distill them into best practices and reporting standards, and release reproducible reference scores across five models and seven benchmarks.
               We hope that the proposed evaluation framework and the Meta-Video benchmark will support video understanding research by providing a reproducible and efficient foundation to measure progress in a reliable way.
             </p>
@@ -278,38 +311,62 @@
 
   <hr style="border: 1px solid #e0e0e0; margin: 20px auto; width: 50%;">
 
-  <section class="section pt-0" id="problem">
+  <section class="section pt-0" id="reported">
     <div class="container is-max-desktop">
       <div class="columns is-centered has-text-centered">
-        <div class="column is-four-fifths">
-          <h2 class="title is-3 has-text-centered" style="padding-top: 20px;">The Problem: Same Checkpoint, Different Scores</h2>
+        <div class="column is-full">
+          <h2 class="title is-3 has-text-centered" style="padding-top: 20px;">Same Checkpoint, Different Scores</h2>
           <div class="content has-text-justified">
             <p>
-              Recent papers report scores for the <em>same</em> Qwen2.5-VL-7B and Qwen3-VL-8B checkpoints that differ by far more than the 2&ndash;5pp gains those papers claim over the base model. The range of reported baseline scores per benchmark (Max &Delta;) across more than twenty recent video reasoning papers:
+              <strong>Performance reported for the Qwen2.5-VL-7B and Qwen3-VL-8B backbones</strong> across general video understanding and video reasoning benchmarks, as collected from the original model reports and from recent papers that build on these checkpoints. Subscripts give the difference to the score in the model report; <em>Max &Delta;</em> is the range of reported scores per benchmark, which reaches 19.5pp despite identical model weights. <em>Ours (reproduced)</em> is our re-evaluation under one fixed protocol at 128 frames. &ndash; = not reported.
             </p>
             <div class="tablewrap">
-              <table class="results">
-                <thead>
-                  <tr><th>Base model</th><th>Video-MME</th><th>TempCompass</th><th>MVBench</th><th>LongVideoBench</th><th>LVBench</th><th>VideoMMMU</th><th>MMVU</th><th>VSI-Bench</th></tr>
-                </thead>
-                <tbody>
-                  <tr><th>Qwen2.5-VL-7B, Max &Delta;</th><td><b>19.5</b></td><td>5.0</td><td>10.6</td><td>8.8</td><td>11.1</td><td>6.8</td><td>17.7</td><td>8.6</td></tr>
-                  <tr><th>Qwen3-VL-8B, Max &Delta;</th><td>8.1</td><td>&ndash;</td><td>1.1</td><td>13.5</td><td><b>19.3</b></td><td>3.5</td><td>&ndash;</td><td>&ndash;</td></tr>
-                </tbody>
+              <table class="results t1">
+              <thead><tr><th></th><th colspan="5" class="grp">General Video Understanding</th><th colspan="7" class="grp grp2">Video Reasoning</th></tr><tr><th>Model</th><th>VideoMME</th><th>TempCompass</th><th>MVBench</th><th>LongVideoBench</th><th>LVBench</th><th class="grp2">VideoMMMU</th><th>MMVU<sub>mcq</sub></th><th>MMVU<sub>val</sub></th><th>VSIBench</th><th>SciVideoBench</th><th>VideoMathQA</th><th>Minerva</th></tr></thead>
+              <tbody>
+              <tr class="blk"><th colspan="13">Base model: Qwen2.5-VL-7B</th></tr>
+              <tr class="base"><th>Qwen2.5-VL-7B report</th><td>65.1</td><td>71.7</td><td>69.6</td><td>56.0</td><td>45.3</td><td>47.4</td><td>&ndash;</td><td>50.1</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td></tr>
+              <tr><th>VideoRFT</th><td>52.8<sub class="down">&minus;12.3</sub></td><td>69.2<sub class="down">&minus;2.5</sub></td><td>59.4<sub class="down">&minus;10.2</sub></td><td>56.0</td><td>45.3</td><td>47.4</td><td>61.3</td><td>&ndash;</td><td>31.8</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td></tr>
+              <tr><th>Videochat-R1.5</th><td>64.4<sub class="down">&minus;0.7</sub></td><td>&ndash;</td><td>67.4<sub class="down">&minus;2.2</sub></td><td>&ndash;</td><td>&ndash;</td><td>46.7<sub class="down">&minus;0.7</sub></td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td></tr>
+              <tr><th>Open-o3-video</th><td>62.4<sub class="down">&minus;2.7</sub></td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>51.2<sub class="up">+3.8</sub></td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td></tr>
+              <tr><th>Video-R2</th><td>66.1<sub class="up">+1.0</sub></td><td>74.2<sub class="up">+2.5</sub></td><td>68.1<sub class="down">&minus;1.5</sub></td><td>61.3<sub class="up">+5.3</sub></td><td>&ndash;</td><td>50.3<sub class="up">+2.9</sub></td><td>67.4</td><td>&ndash;</td><td>37.7</td><td>16.4</td><td>26.7</td><td>35.3</td></tr>
+              <tr><th>Viss-R1</th><td>56.6<sub class="down">&minus;8.5</sub></td><td>72.6<sub class="up">+0.9</sub></td><td>59.0<sub class="down">&minus;10.6</sub></td><td>&ndash;</td><td>&ndash;</td><td>48.1<sub class="up">+0.7</sub></td><td>60.0</td><td>&ndash;</td><td>30.1</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td></tr>
+              <tr><th>Rethinking CoT</th><td>55.5<sub class="down">&minus;9.6</sub></td><td>&ndash;</td><td>63.2<sub class="down">&minus;6.4</sub></td><td>52.5<sub class="down">&minus;3.5</sub></td><td>34.2<sub class="down">&minus;11.1</sub></td><td>&ndash;</td><td>63.4</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td></tr>
+              <tr><th>STORM</th><td>55.4<sub class="down">&minus;9.7</sub></td><td>69.9<sub class="down">&minus;1.8</sub></td><td>60.5<sub class="down">&minus;9.1</sub></td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td></tr>
+              <tr><th>CoVER</th><td>63.1<sub class="down">&minus;2.0</sub></td><td>&ndash;</td><td>&ndash;</td><td>56.0</td><td>42.0<sub class="down">&minus;3.3</sub></td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td></tr>
+              <tr><th>Video-VER</th><td>59.2<sub class="down">&minus;5.9</sub></td><td>73.7<sub class="up">+2.0</sub></td><td>63.6<sub class="down">&minus;6.0</sub></td><td>&ndash;</td><td>&ndash;</td><td>47.3<sub class="down">&minus;0.1</sub></td><td>64.2</td><td>&ndash;</td><td>32.3</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td></tr>
+              <tr><th>Video-TwG</th><td>46.6<sub class="down">&minus;18.5</sub></td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>44.4<sub class="down">&minus;3.0</sub></td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td></tr>
+              <tr><th>SDRL</th><td>56.5<sub class="down">&minus;8.6</sub></td><td>72.5<sub class="up">+0.8</sub></td><td>63.3<sub class="down">&minus;6.3</sub></td><td>&ndash;</td><td>&ndash;</td><td>48.4<sub class="up">+1.0</sub></td><td>65.4</td><td>&ndash;</td><td>29.1</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td></tr>
+              <tr><th>Video-ToC</th><td>59.6<sub class="down">&minus;5.5</sub></td><td>72.9<sub class="up">+1.2</sub></td><td>59.2<sub class="down">&minus;10.4</sub></td><td>&ndash;</td><td>&ndash;</td><td>50.4<sub class="up">+3.0</sub></td><td>60.0</td><td>&ndash;</td><td>31.4</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td></tr>
+              <tr><th>VidBridge-R1</th><td>59.4<sub class="down">&minus;5.7</sub></td><td>&ndash;</td><td>58.7<sub class="down">&minus;10.9</sub></td><td>50.6<sub class="down">&minus;5.4</sub></td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td></tr>
+              <tr><th>TW-GRPO</th><td>56.5<sub class="down">&minus;8.6</sub></td><td>72.5<sub class="up">+0.8</sub></td><td>63.3<sub class="down">&minus;6.3</sub></td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>65.4</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td></tr>
+              <tr><th>VideoAuto-R1</th><td>66.0<sub class="up">+0.9</sub></td><td>&ndash;</td><td>67.1<sub class="down">&minus;2.5</sub></td><td>60.9<sub class="up">+4.9</sub></td><td>&ndash;</td><td>52.7<sub class="up">+5.3</sub></td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td></tr>
+              <tr><th>MOSS-ChatV</th><td>59.7<sub class="down">&minus;5.4</sub></td><td>72.2<sub class="up">+0.5</sub></td><td>67.1<sub class="down">&minus;2.5</sub></td><td>&ndash;</td><td>&ndash;</td><td>48.1<sub class="up">+0.7</sub></td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td></tr>
+              <tr><th>STRIVE</th><td>57.8<sub class="down">&minus;7.3</sub></td><td>72.8<sub class="up">+1.1</sub></td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>48.6<sub class="up">+1.2</sub></td><td>&ndash;</td><td>&ndash;</td><td>34.3</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td></tr>
+              <tr><th>RLER</th><td>65.1</td><td>69.2<sub class="down">&minus;2.5</sub></td><td>67.5<sub class="down">&minus;2.1</sub></td><td>56.0</td><td>42.0<sub class="down">&minus;3.3</sub></td><td>47.4</td><td>&ndash;</td><td>&ndash;</td><td>37.4</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td></tr>
+              <tr><th>VideoKR</th><td>65.1</td><td>&ndash;</td><td>66.3<sub class="down">&minus;3.3</sub></td><td>60.9<sub class="up">+4.9</sub></td><td>&ndash;</td><td>51.1<sub class="up">+3.7</sub></td><td>&ndash;</td><td>55.7</td><td>&ndash;</td><td>28.1</td><td>&ndash;</td><td>&ndash;</td></tr>
+              <tr><th>AdaThinkV</th><td>66.0<sub class="up">+0.9</sub></td><td>&ndash;</td><td>67.1<sub class="down">&minus;2.5</sub></td><td>60.9<sub class="up">+4.9</sub></td><td>&ndash;</td><td>54.7<sub class="up">+7.3</sub></td><td>66.2</td><td>&ndash;</td><td>&ndash;</td><td>27.9</td><td>29.8</td><td>&ndash;</td></tr>
+              <tr class="delta"><th>Max Δ</th><td>19.5</td><td>5.0</td><td>10.9</td><td>10.7</td><td>11.1</td><td>10.3</td><td>7.4</td><td>5.6</td><td>8.6</td><td>11.7</td><td>3.1</td><td>0.0</td></tr>
+              <tr class="ours"><th>Ours (reproduced, 128 f)</th><td>65.6<sub class="up">+0.5</sub></td><td>73.4<sub class="up">+1.7</sub></td><td>68.0<sub class="down">&minus;1.6</sub></td><td>60.2<sub class="up">+4.2</sub></td><td>42.1<sub class="down">&minus;3.2</sub></td><td>38.8<sub class="down">&minus;8.6</sub></td><td>64.6</td><td>51.9<sub class="up">+1.8</sub></td><td>38.3</td><td>27.9</td><td>26.9</td><td>35.3</td></tr>
+              <tr class="blk"><th colspan="13">Base model: Qwen3-VL-8B-Instruct</th></tr>
+              <tr class="base"><th>Qwen3-VL-8B-Instruct report</th><td>71.4</td><td>&ndash;</td><td>68.7</td><td>&ndash;</td><td>58.0</td><td>65.3</td><td>&ndash;</td><td>58.7</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td></tr>
+              <tr><th>LLaVA-OneVision-2</th><td>71.4</td><td>74.3</td><td>69.0<sub class="up">+0.3</sub></td><td>68.0</td><td>58.0</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td></tr>
+              <tr><th>VSeek</th><td>63.7<sub class="down">&minus;7.7</sub></td><td>&ndash;</td><td>&ndash;</td><td>54.5</td><td>38.7<sub class="down">&minus;19.3</sub></td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td></tr>
+              <tr><th>OneThinker</th><td>63.3<sub class="down">&minus;8.1</sub></td><td>&ndash;</td><td>&ndash;</td><td>61.7</td><td>&ndash;</td><td>63.3<sub class="down">&minus;2.0</sub></td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td></tr>
+              <tr><th>VideoKR</th><td>68.2<sub class="down">&minus;3.2</sub></td><td>&ndash;</td><td>67.9<sub class="down">&minus;0.8</sub></td><td>61.6</td><td>&ndash;</td><td>61.8<sub class="down">&minus;3.5</sub></td><td>&ndash;</td><td>59.6</td><td>&ndash;</td><td>33.4</td><td>&ndash;</td><td>&ndash;</td></tr>
+              <tr><th>InternVideo3</th><td>71.4</td><td>&ndash;</td><td>&ndash;</td><td>62.4</td><td>58.0</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td></tr>
+              <tr><th>AdaThinkV</th><td>72.5<sub class="up">+1.1</sub></td><td>&ndash;</td><td>69.4<sub class="up">+0.7</sub></td><td>67.6</td><td>&ndash;</td><td>61.0<sub class="down">&minus;4.3</sub></td><td>69.9</td><td>&ndash;</td><td>&ndash;</td><td>33.1</td><td>30.7</td><td>&ndash;</td></tr>
+              <tr class="delta"><th>Max Δ</th><td>9.2</td><td>&ndash;</td><td>1.5</td><td>13.5</td><td>19.3</td><td>4.3</td><td>&ndash;</td><td>0.9</td><td>&ndash;</td><td>0.3</td><td>&ndash;</td><td>&ndash;</td></tr>
+              <tr class="ours"><th>Ours (reproduced, 128 f)</th><td>69.2<sub class="down">&minus;2.2</sub></td><td>74.2</td><td>69.2<sub class="up">+0.5</sub></td><td>63.6</td><td>46.5<sub class="down">&minus;11.5</sub></td><td>56.6<sub class="down">&minus;8.7</sub></td><td>69.1</td><td>58.7</td><td>59.7</td><td>34.5</td><td>31.6</td><td>36.0</td></tr>
+              </tbody>
               </table>
             </div>
-            <p>
-              Reported scores are also hard to reproduce. On MMVU, the numbers that recent papers report for the same checkpoints spread widely, and several claimed gains of RL-trained models over the Qwen2.5-VL-7B base model fall inside the range the base model itself covers when only the prompt changes:
-            </p>
             <div class="columns is-centered">
               <div class="column is-12">
                 <img src="static/images/mmvu_reported_vs_measured.png" alt="Reported vs. reproduced MMVU accuracy" style="width: 100%;">
-                <p class="figcap"><strong>Reported vs. reproduced MMVU accuracy.</strong> Left: paper-reported scores (dark) vs. our reproductions at 32, 64 and 128 frames (light). Right: prompt sensitivity of Qwen2.5-VL-7B across six prompts; the shaded band is the range of reproduced RL results, which falls within the base model's prompt variance.</p>
+                <p class="figcap"><strong>Reported vs. reproduced MMVU accuracy.</strong> Left: paper-reported scores (dark) vs. our reproductions at 32, 64 and 128 frames (light) for Video-R1-7B and Video-R2-7B on the MMVU validation split (MCQ, 625 items). Right: prompt sensitivity of Qwen2.5-VL-7B across six prompts at 32, 64 and 128 frames; the shaded band is the range of reproduced RL results, which falls within the base model's prompt variance.</p>
               </div>
             </div>
-            <p>
-              A reliable evaluation that supports fast model development therefore needs <strong>(1)</strong> a clean set of benchmark samples, <strong>(2)</strong> low evaluation cost while preserving rankings, and <strong>(3)</strong> a standardized evaluation protocol. Meta-Video addresses (1) and (2); the protocol and evaluation cards address (3).
-            </p>
           </div>
         </div>
       </div>
@@ -321,37 +378,136 @@
   <section class="section pt-0" id="protocol">
     <div class="container is-max-desktop">
       <div class="columns is-centered has-text-centered">
-        <div class="column is-four-fifths">
+        <div class="column is-full">
           <h2 class="title is-3 has-text-centered" style="padding-top: 20px;">Standardizing Evaluations for Video Understanding</h2>
           <div class="content has-text-justified">
             <p>
-              We fix a reference configuration (bold in the figure at the top) and vary one factor at a time on Qwen2.5-VL-7B over Video-MME, TempCompass, MVBench, LongVideoBench and Meta-Video. What we found:
+              Sensitivity of <strong>Qwen2.5-VL-7B</strong> to the evaluation settings. Each panel varies one setting while every other setting stays at the reference configuration (dashed line: HF backend, batch size 1, 4 uniformly sampled frames, torchcodec, 602k max pixels, <code>.mp4</code> input, temperature 0, official <code>lmms_eval</code> prompt). Pick a benchmark, then <strong>hover</strong> a point, line or legend entry for the exact number; whiskers are the standard deviation over repeated runs, the red star marks the best setting of the panel. <em>Avg.</em> is the mean over Video-MME, TempCompass, MVBench and LongVideoBench; runtimes are the total minutes of all runs in a panel.
             </p>
-
-            <div class="finding"><span class="cfg cfg-green">Inference backend</span> and <span class="cfg cfg-green">Batch size</span><br>
-              Scores within one backend are stable (mean std. 0.15pp across batch sizes 1&ndash;32), but HF and vLLM differ by 4&ndash;6pp on TempCompass, MVBench and Meta-Video (about 24% vs. 30% on Meta-Video). The cause: the evaluated vLLM path converts video input into individual images and bypasses the Qwen models' spatiotemporal pooling. Our implementation restores the pooling and aligns vLLM preprocessing with HF. Batch size itself has little effect on aggregate scores but should be reported.</div>
-
-            <div class="finding"><span class="cfg cfg-orange">Number of frames</span> and <span class="cfg cfg-orange">Frame sampling</span><br>
-              Going from 4 to 128 uniformly sampled frames raises Video-MME from 50.0% to 65.5% and Meta-Video from 24.8% to 40.8%; TempCompass and MVBench saturate or reverse beyond 64 frames. Sampling at 1 fps instead of uniformly costs 3.4&ndash;5.0pp on the short clips of TempCompass and MVBench. The evaluated lmms_eval exposes a maximum frame count that its backends do not enforce (causing out-of-memory on long videos); our implementation enforces it.</div>
-
-            <div class="finding"><span class="cfg cfg-orange">Video decoder</span> and <span class="cfg cfg-orange">Frame resolution</span><br>
-              decord, torchvision and torchcodec extract different frames at the same settings. The decoder changes scores (torchvision drops MVBench by 10pp and TempCompass by 7pp) but not the model ranking. Frame resolution (200k to 602k max pixels) changes scores by under 1pp.</div>
-
-            <div class="finding"><span class="cfg cfg-blue">Input modality</span><br>
-              Pre-extracted <code>.jpg</code> frames beat <code>.mp4</code> input at low frame counts (+5.0pp on TempCompass at 4 frames) but flatten or reverse at high ones: at 128 frames on MVBench, image input scores 60.6% vs. 68.0% for video input and takes 2,329 instead of 1,095 minutes. Video input goes through spatiotemporal pooling, which halves the visual-token count.</div>
-
-            <div class="finding"><span class="cfg cfg-blue">Prompt</span> and <span class="cfg cfg-blue">Decoding temperature</span><br>
-              A prompt that asks for a single letter and nothing else beats the lmms_eval default by 2.5pp (video input) and 1.2pp (image input) on Meta-Video; a step-by-step prompt is worse on average. Prompt layout (VT, TVT, VTV) moves the score by under 0.6pp. Temperature 0 is best; on Video-MME, accuracy falls from 50.0% at T=0 to 44.9% at T=1.</div>
-
-            <p>
-              Which of these settings produced a given number is what the <a href="#evalcard">evaluation card</a> below records.
-            </p>
+            <div class="ds-tabs" id="ds-tabs"></div>
+            <div class="knob-grid" id="knob-grid"></div>
+            <p class="figcap" style="margin-top: 1em;">Numbers are Table 2 of the paper. Which of these settings produced a given score is what the <a href="#evalcard">evaluation card</a> below records.</p>
           </div>
         </div>
       </div>
     </div>
   </section>
+  <div id="kc-tip"></div>
 
+  <script>
+  (function () {
+    const DS = ['Video-MME', 'TempCompass', 'MVBench', 'LongVideoBench', 'Avg.', 'Meta-V'];
+    const REF = [50.0, 64.4, 59.2, 50.3, 56.0, 24.8];
+    const PAL = ['#2f6fdb', '#eb6834', '#1baf7a', '#a4318f'];
+    const K = [
+      {title: '<span class="cfg cfg-green">Inference backend</span> &amp; <span class="cfg cfg-green">Batch size</span>', fixed: '602k px, uniform sampling, torchcodec, .mp4, T=0, 4 frames', xlab: 'batch size', x: ['1', '4', '8', '16', '32'],
+       series: [
+         {name: 'HF', rt: [157, 46.6, 166, 77.2, 447, 133], rows: [[50.0,64.4,59.2,50.3,56.0,24.8],[50.0,64.7,59.6,50.5,56.2,24.4],[50.0,65.0,59.3,50.7,56.2,24.1],[50.1,64.8,59.2,50.4,56.1,24.6],[50.0,64.9,59.3,50.4,56.1,24.6]]},
+         {name: 'vLLM', rt: [155, 55.6, 257, 84, 551, 112], rows: [[50.4,69.0,64.4,52.1,58.9,31.0],[50.3,69.2,64.4,51.9,59.0,30.5],[50.2,69.2,64.3,51.9,58.9,30.6],[50.3,69.2,64.4,51.7,58.9,30.4],[50.3,69.1,64.3,51.8,58.9,30.4]],
+          sd: [[.1,.1,.1,.1,null,.1],[0,.2,0,.2,null,.2],[.2,.2,.2,.1,null,.5],[.1,.4,.2,0,null,.3],[.1,.1,.1,.1,null,.1]]}],
+       note: 'Scores within one backend are stable across batch sizes (mean std. 0.15pp), but HF and vLLM differ by 4&ndash;6pp on TempCompass, MVBench and Meta-V: the evaluated vLLM path turns the video into single images and bypasses the Qwen spatiotemporal pooling. <b>Our implementation restores the pooling.</b>'},
+      {title: '<span class="cfg cfg-blue">Input modality</span> &amp; <span class="cfg cfg-orange">Number of frames</span>', fixed: '602k px, uniform sampling, HF, batch 1, T=0, torchcodec', xlab: 'number of frames', x: ['4', '8', '16', '32', '64', '128'],
+       series: [
+         {name: '.mp4 video', rt: [1447, 356, 1095, 777, 3675, 695], rows: [[50.0,64.4,59.2,50.3,56.0,24.8],[53.3,70.3,63.4,52.7,59.9,28.2],[58.0,71.8,66.7,56.1,63.1,33.4],[61.4,73.3,68.5,58.7,65.5,36.1],[63.5,74.1,69.0,60.2,66.7,39.2],[65.5,73.4,68.0,60.2,66.8,40.8]]},
+         {name: '.jpg frames', rt: [2495, 663, 2329, 1337, 6824, 1021], rows: [[49.7,69.4,64.0,51.5,58.7,27.8],[55.7,71.4,64.8,55.1,61.8,31.3],[58.9,70.6,63.6,56.9,62.5,37.0],[61.2,70.1,62.2,57.2,62.7,37.1],[62.6,68.3,61.5,58.1,62.6,38.9],[62.7,66.8,60.6,57.5,61.9,36.5]]}],
+       note: 'Frame count is the strongest factor: 4 to 128 frames lifts Video-MME from 50.0 to 65.5 and Meta-V from 24.8 to 40.8. Pre-extracted <b>.jpg</b> frames win at low frame counts but flatten or reverse at high ones, and cost about twice the runtime; <b>.mp4</b> input goes through spatiotemporal pooling, which halves the visual tokens.'},
+      {title: '<span class="cfg cfg-orange">Frame sampling</span>', fixed: '602k px, HF, batch 1, torchcodec, .mp4, T=0', xlab: 'frame budget', x: ['32', '64'],
+       series: [
+         {name: 'Uniform (exactly n frames)', rt: [542, 134, 413, 286, 1375, 356], rows: [[61.4,73.3,68.6,58.7,65.5,36.1],[63.5,74.2,69.0,60.2,66.7,39.2]]},
+         {name: '1 fps (capped at n frames)', rt: [542, 37.7, 135, 238, 953, 241], rows: [[61.5,69.9,64.1,57.7,63.3,34.9],[63.5,69.9,64.0,58.7,64.0,39.4]]}],
+       note: 'Sampling at 1 fps instead of uniformly has no effect on Video-MME, but on the short clips of TempCompass and MVBench it lowers accuracy by 3.4&ndash;5.0pp. Uniform sampling is better on average, so dense sampling helps even on short videos. The evaluated lmms_eval exposes a frame cap that its backends do not enforce; <b>ours enforces it</b>.'},
+      {title: '<span class="cfg cfg-orange">Video decoder</span>', fixed: '602k px, uniform sampling, HF, batch 1, .mp4, T=0, 4 frames', xlab: 'video reader', x: ['decord', 'torchvision', 'torchcodec'],
+       series: [
+         {name: 'decoder', rt: [100, 30.0, 104, 44, 278, 97.9], rows: [[50.1,64.5,59.4,50.4,56.1,25.2],[50.4,57.5,49.1,48.7,51.4,24.9],[50.1,64.4,59.2,50.3,56.0,24.8]]}],
+       note: 'Decoders differ in timestamp handling and keyframe resolution, so they extract different frames at the same settings. The choice changes scores (torchvision drops MVBench by 10pp and TempCompass by 7pp) but not the model ranking. We use torchcodec, the lmms_eval default, and <b>recommend reporting the decoder</b>.'},
+      {title: '<span class="cfg cfg-orange">Frame resolution</span>', fixed: 'uniform sampling, HF, batch 1, torchcodec, .mp4, T=0, 4 frames', xlab: 'max pixels per frame', x: ['200,704', '301,056', '602,112'],
+       series: [
+         {name: 'max pixels', rt: [82.5, 30.8, 101, 40.7, 255, 95.3], rows: [[49.4,65.5,59.3,50.1,56.1,24.9],[50.1,64.5,59.0,50.5,56.0,25.2],[50.1,64.5,59.2,50.3,56.0,24.9]]}],
+       note: 'Frames are resized so their area stays below the pixel budget, which sets the number of visual tokens per frame. Among the tested budgets the variation is under 1pp: <b>resolution does not change results significantly</b> at this frame count.'},
+      {title: '<span class="cfg cfg-blue">Decoding temperature</span>', fixed: '602k px, uniform sampling, HF, batch 1, torchcodec, .mp4, 4 frames', xlab: 'temperature T', x: ['0', '0.7', '0.8', '0.9', '1.0'],
+       series: [
+         {name: 'temperature', rt: [172, 62.1, 169, 58.7, 461, 169], rows: [[50.0,64.4,59.2,50.3,56.0,24.8],[47.1,65.0,56.9,47.2,54.0,25.9],[46.3,63.9,56.1,45.9,53.0,25.5],[45.6,62.8,55.6,43.4,51.9,25.3],[44.9,61.5,54.4,43.3,51.0,24.9]],
+          sd: [[null,null,null,null,null,null],[.4,3.0,.5,1.1,null,1.1],[1.3,3.9,.8,1.2,null,1.4],[1.1,3.5,.2,0,null,.3],[.3,3.9,.2,1.0,null,1.2]]}],
+       note: 'Greedy decoding (T=0) is best and deterministic. Sampling lowers accuracy almost monotonically (Video-MME 50.0 at T=0 to 44.9 at T=1) and adds run-to-run variance of up to 3.9pp on TempCompass. <b>Report T=0 unless the method needs sampling.</b>'}
+    ];
+
+    const tabs = document.getElementById('ds-tabs'), grid = document.getElementById('knob-grid'), tip = document.getElementById('kc-tip');
+    let cur = 0;
+    function showTip(ev, html) { tip.innerHTML = html; tip.style.opacity = 1; tip.style.left = (ev.clientX + 14) + 'px'; tip.style.top = (ev.clientY + 14) + 'px'; }
+    function hideTip() { tip.style.opacity = 0; }
+    function S(tag, a) { const e = document.createElementNS('http://www.w3.org/2000/svg', tag); for (const k in a) e.setAttribute(k, a[k]); return e; }
+    function fmt(v) { return v.toFixed(1); }
+
+    function chart(k, di) {
+      const W = 440, H = 230, pl = 40, pr = 16, pt = 14, pb = 34, iw = W - pl - pr, ih = H - pt - pb;
+      const n = k.x.length, xs = i => pl + (n === 1 ? iw / 2 : i * iw / (n - 1)) * 0.92 + iw * 0.04;
+      const vals = []; k.series.forEach(s => s.rows.forEach((r, i) => { const v = r[di]; if (v != null) { const sd = s.sd && s.sd[i][di] || 0; vals.push(v - sd, v + sd); } })); vals.push(REF[di]);
+      let lo = Math.min(...vals), hi = Math.max(...vals); let pad = Math.max((hi - lo) * 0.22, 1.2); lo -= pad; hi += pad;
+      const ys = v => pt + ih - (v - lo) / (hi - lo) * ih;
+      const svg = S('svg', {viewBox: `0 0 ${W} ${H}`, class: k.series.length > 1 ? 'multi' : ''});
+      // y grid
+      const step = (hi - lo) > 12 ? 5 : (hi - lo) > 5 ? 2 : 1;
+      for (let v = Math.ceil(lo / step) * step; v <= hi; v += step) {
+        svg.appendChild(S('line', {class: 'kc-grid', x1: pl, x2: pl + iw, y1: ys(v), y2: ys(v)}));
+        const t = S('text', {class: 'kc-axis', x: pl - 6, y: ys(v) + 3.5, 'text-anchor': 'end'}); t.textContent = v; svg.appendChild(t);
+      }
+      k.x.forEach((lab, i) => { const t = S('text', {class: 'kc-axis', x: xs(i), y: pt + ih + 14, 'text-anchor': 'middle'}); t.textContent = lab; svg.appendChild(t); });
+      const xt = S('text', {class: 'kc-axis-title', x: pl + iw / 2, y: H - 3, 'text-anchor': 'middle'}); xt.textContent = k.xlab; svg.appendChild(xt);
+      const yt = S('text', {class: 'kc-axis-title', x: -(pt + ih / 2), y: 10, 'text-anchor': 'middle', transform: 'rotate(-90)'}); yt.textContent = 'accuracy (%)'; svg.appendChild(yt);
+      // reference line
+      const ry = ys(REF[di]);
+      svg.appendChild(S('line', {class: 'kc-ref', x1: pl, x2: pl + iw, y1: ry, y2: ry}));
+      // best
+      let best = {v: -1};
+      k.series.forEach((s, si) => s.rows.forEach((r, i) => { if (r[di] > best.v) best = {v: r[di], si, i}; }));
+      const groups = [], dotGroups = [];
+      k.series.forEach((s, si) => {
+        const col = PAL[si], g = S('g', {class: 'kc-series'}), gd = S('g', {class: 'kc-series'});
+        const pts = s.rows.map((r, i) => [xs(i), ys(r[di])]);
+        const d = pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ');
+        if (pts.length > 1) { g.appendChild(S('path', {class: 'halo', d})); g.appendChild(S('path', {class: 'line', d, stroke: col})); }
+        const on = () => { svg.classList.add('dim'); g.classList.add('on'); gd.classList.add('on'); leg[si] && leg[si].classList.add('on'); };
+        const off = () => { svg.classList.remove('dim'); g.classList.remove('on'); gd.classList.remove('on'); leg[si] && leg[si].classList.remove('on'); hideTip(); };
+        if (pts.length > 1) { const hit = S('path', {class: 'hit', d}); hit.addEventListener('mouseenter', e => { on(); showTip(e, '<b>' + s.name + '</b><br><span class="mut">runtime ' + s.rt[di] + ' min on ' + DS[di] + '</span>'); }); hit.addEventListener('mousemove', e => showTip(e, '<b>' + s.name + '</b><br><span class="mut">runtime ' + s.rt[di] + ' min on ' + DS[di] + '</span>')); hit.addEventListener('mouseleave', off); g.appendChild(hit); }
+        s.rows.forEach((r, i) => {
+          const v = r[di], sd = s.sd && s.sd[i][di]; if (v == null) return;
+          const cx = xs(i), cy = ys(v);
+          if (sd > 0) { gd.appendChild(S('line', {class: 'err', x1: cx, x2: cx, y1: ys(v + sd), y2: ys(v - sd), stroke: col, 'stroke-width': 1.5})); [ys(v + sd), ys(v - sd)].forEach(yy => gd.appendChild(S('line', {class: 'err', x1: cx - 3, x2: cx + 3, y1: yy, y2: yy, stroke: col, 'stroke-width': 1.5}))); }
+          const c = S('circle', {cx, cy, r: 4.2, fill: col});
+          const html = '<b>' + DS[di] + ': ' + fmt(v) + (sd > 0 ? ' &plusmn; ' + sd.toFixed(1) : '') + '%</b><br>' + (k.series.length > 1 ? s.name + ' &middot; ' : '') + k.xlab + ' = ' + k.x[i] + '<br><span class="mut">fixed: ' + k.fixed + '</span><br><span class="mut">' + (v - REF[di] >= 0 ? '+' : '') + (v - REF[di]).toFixed(1) + 'pp vs. reference</span>';
+          c.addEventListener('mouseenter', e => { on(); c.setAttribute('r', 6); showTip(e, html); });
+          c.addEventListener('mousemove', e => showTip(e, html));
+          c.addEventListener('mouseleave', () => { off(); c.setAttribute('r', 4.2); });
+          gd.appendChild(c);
+          const lbl = S('text', {class: 'vl', x: cx, y: cy - 8 - (sd > 0 ? ys(v) - ys(v + sd) : 0), 'text-anchor': 'middle', fill: col}); lbl.textContent = fmt(v); gd.appendChild(lbl);
+        });
+        svg.appendChild(g); groups.push(g); dotGroups.push(gd);
+      });
+      dotGroups.forEach(gd => svg.appendChild(gd));
+      const bx = xs(best.i), by = ys(best.v);
+      let sp = ''; for (let j = 0; j < 10; j++) { const r = j % 2 ? 3.2 : 7.5, a = Math.PI / 2 + j * Math.PI / 5; sp += (j ? 'L' : 'M') + (bx + r * Math.cos(a)).toFixed(1) + ' ' + (by - r * Math.sin(a)).toFixed(1) + ' '; }
+      svg.appendChild(S('path', {class: 'kc-best', d: sp + 'Z'}));
+      // legend
+      const legEl = document.createElement('div'); legEl.className = 'kc-legend'; const leg = [];
+      if (k.series.length > 1) k.series.forEach((s, si) => { const e = document.createElement('span'); e.innerHTML = '<i style="background:' + PAL[si] + '"></i>' + s.name; e.addEventListener('mouseenter', () => { svg.classList.add('dim'); groups[si].classList.add('on'); dotGroups[si].classList.add('on'); e.classList.add('on'); }); e.addEventListener('mouseleave', () => { svg.classList.remove('dim'); groups[si].classList.remove('on'); dotGroups[si].classList.remove('on'); e.classList.remove('on'); }); legEl.appendChild(e); leg.push(e); });
+      const rt = document.createElement('span'); rt.innerHTML = '<i class="dash"></i>reference configuration: ' + fmt(REF[di]); rt.style.cursor = 'default'; legEl.appendChild(rt);
+      const rs = document.createElement('span'); rs.innerHTML = '<span style="color:#d03b3b">&#9733;</span> best: ' + fmt(best.v) + (k.series.length > 1 ? ' (' + k.series[best.si].name + ', ' : ' (') + k.x[best.i] + ') &middot; runtime ' + k.series.map(s => s.rt[di] + ' min').join(' / '); rs.style.cursor = 'default'; legEl.appendChild(rs);
+      return {svg, legEl};
+    }
+    function render() {
+      grid.innerHTML = '';
+      K.forEach(k => {
+        const card = document.createElement('div'); card.className = 'knob-card';
+        card.innerHTML = '<div class="kc-title">' + k.title + '</div><div class="kc-fixed"><b>Fixed:</b> ' + k.fixed + '</div>';
+        const {svg, legEl} = chart(k, cur); card.appendChild(svg); card.appendChild(legEl);
+        const nt = document.createElement('div'); nt.className = 'kc-note'; nt.innerHTML = k.note; card.appendChild(nt);
+        grid.appendChild(card);
+      });
+    }
+    DS.forEach((d, i) => { const b = document.createElement('button'); b.className = 'ds-tab' + (i === 5 ? ' metav' : '') + (i === cur ? ' active' : ''); b.textContent = d; b.onclick = () => { cur = i; [...tabs.children].forEach((c, j) => c.classList.toggle('active', j === i)); render(); }; tabs.appendChild(b); });
+    render();
+  })();
+  </script>
 
   <hr style="border: 1px solid #e0e0e0; margin: 20px auto; width: 50%;">
 
@@ -362,7 +518,7 @@
           <h2 class="title is-3 has-text-centered" style="padding-top: 20px;">Evaluation Cards: Report What Produced the Score</h2>
           <div class="content has-text-justified">
             <p>
-              Video models are highly sensitive to evaluation choices, yet those choices are rarely reported in full. Inspired by <a href="https://arxiv.org/abs/2204.01075" target="_blank">dataset cards</a>, an <strong>evaluation card</strong> summarizes the complete configuration behind a table of numbers in one place. Options in <strong>bold</strong> are the ones used; a set {&middot;} denotes a parameter sweep with one run per value. We provide a card for every table in the paper and recommend attaching one to any new video benchmark result. The card below is the one for the standardized comparison in the <a href="#results">Results</a> section.
+              Video models are highly sensitive to evaluation choices, yet those choices are rarely reported in full. Inspired by <a href="https://arxiv.org/abs/2204.01075" target="_blank">dataset cards</a>, an <strong>evaluation card</strong> summarizes the complete configuration behind a table of numbers in one place. Options in <strong>bold</strong> are the ones used; a set {&middot;} denotes a parameter sweep with one run per value. We provide a card for every table in the paper and recommend attaching one to any new video benchmark result. The card below is the one for the standardized comparison of five open models (Table 4 of the <a href="https://arxiv.org/abs/2610.18535" target="_blank">paper</a>).
             </p>
             <div class="evalcard">
               <div class="ec-title">Evaluation Card <span class="ec-ref">(standardized comparison of five open models)</span></div>
@@ -402,21 +558,14 @@
           <h2 class="title is-3 has-text-centered" style="padding-top: 20px;">Meta-Video: An Efficient and Discriminative Benchmark</h2>
           <div class="content has-text-justified">
             <p>
-              Evaluating video models across multiple benchmarks and configurations is expensive, and questions that models answer without visual input inflate scores and obscure differences between models. Meta-Video is a compact benchmark of <strong>1,000 question-answer pairs over 791 videos</strong>, selected from the evaluation sets of
+              Meta-Video is a compact benchmark of <strong>1,000 question-answer pairs over 791 videos</strong>, drawn from the evaluation sets of
               <a href="https://arxiv.org/abs/2405.21075" target="_blank">Video-MME</a>,
               <a href="https://arxiv.org/abs/2407.15754" target="_blank">LongVideoBench</a>,
               <a href="https://arxiv.org/abs/2406.08035" target="_blank">LVBench</a>,
               <a href="https://arxiv.org/abs/2411.10979" target="_blank">VideoMMMU</a> and
-              <a href="https://arxiv.org/abs/2412.14171" target="_blank">VSI-Bench</a>.
-            </p>
-            <p>
-              <strong>Construction.</strong> To filter questions answerable without visual input, we replace all frames with black frames and evaluate Qwen2.5-VL-7B-Instruct, Qwen3-VL-8B-Instruct and InternVL3.5-8B. Every question that all three models answer correctly is discarded. We then sample question-answer pairs from the remaining questions in each source benchmark, balanced across sources, video durations and question categories.
-            </p>
-            <p>
-              <strong>Question types.</strong> 937 questions are multiple-choice and 63 require a numerical free-form answer. 564 questions have four options, 185 five, and 170 more than five (157 with exactly ten). Correct answers are evenly spread across options: random guessing scores 20.3 and always picking the most frequent option scores 23.3.
-            </p>
-            <p>
-              <strong>Video duration.</strong> Videos run up to one hour: 335 short (&lt;5 min), 281 medium (5&ndash;20 min) and 175 long (20&ndash;60 min). Benchmarks described as "long video" differ widely: videos average 41.1 min in the Video-MME long split, 7.9 min in LongVideoBench and 67.3 min in LVBench.
+              <a href="https://arxiv.org/abs/2412.14171" target="_blank">VSI-Bench</a>, and balanced across sources, video durations (up to one hour) and question categories.
+              Questions that models answer correctly even when every frame is replaced by a black frame are removed, so every remaining item requires the video.
+              The result follows the trend of the full benchmark suite while costing about 5&times; less to evaluate, which makes it a practical first stop for comparing new models across frame budgets.
             </p>
             <div class="columns is-centered is-multiline">
               <div class="column is-6">
@@ -436,9 +585,6 @@
                 <p class="figcap">Video duration distribution on Meta-Video.</p>
               </div>
             </div>
-            <p>
-              Scores on Meta-Video are lower than on the source benchmarks by construction, since the questions that language priors solve are gone. Compare models by rank and by Meta-Video score, not against published numbers.
-            </p>
           </div>
         </div>
       </div>
@@ -455,13 +601,14 @@
           <h2 class="title is-3 has-text-centered" style="padding-top: 20px;">Explore the 1,000 Questions</h2>
           <div class="content has-text-justified">
             <p>
-              Every node is one question-answer pair of Meta-Video, colored by its source benchmark. Edges join items from the same source, with questions on the same video pulled closest together, so each source forms one cluster. <strong>Hover</strong> a node to read the question, its options and the correct answer; <strong>click</strong> to pin the card and open the video. Click a legend entry to hide or show a source.
+              Every node is one question-answer pair of Meta-Video, colored by its source benchmark; questions on the same video are linked and sit closest together. <strong>Hover</strong> a node for a frame-by-frame preview of its video with the question, its options and the correct answer; <strong>click</strong> a node to pin the card and stream the full video; <strong>drag</strong> nodes around, and click a legend entry to hide or show a source.
             </p>
             <div id="graph-legend"></div>
             <div id="graph-wrap">
               <canvas id="graph"></canvas>
               <div id="graph-tip"></div>
               <div id="graph-pin"></div>
+              <div id="graph-hint">hover a node &middot; drag to move</div>
             </div>
           </div>
         </div>
@@ -474,53 +621,81 @@
   (function () {
     const COLORS = {'Video-MME': '#4e79a7', 'LongVideoBench': '#f28e2b', 'LVBench': '#59a14f', 'VideoMMMU': '#e15759', 'VSI-Bench': '#b07aa1'};
     const HF = 'https://huggingface.co/datasets/soumyasj/Meta-Video/resolve/main/';
-    const canvas = document.getElementById('graph'), tip = document.getElementById('graph-tip'), legend = document.getElementById('graph-legend'), pinNote = document.getElementById('graph-pin');
+    const NFRAMES = 8;
+    const canvas = document.getElementById('graph'), tip = document.getElementById('graph-tip'), legend = document.getElementById('graph-legend'), pinNote = document.getElementById('graph-pin'), hint = document.getElementById('graph-hint');
     const ctx = canvas.getContext('2d');
     const hidden = new Set();
-    let nodes = [], links = [], sim, hover = null, pinned = null, W = 900, H = 620, dpr = window.devicePixelRatio || 1;
+    let nodes = [], links = [], sim, hover = null, pinned = null, drag = null, W = 900, H = 680, dpr = window.devicePixelRatio || 1;
+    let mouse = null, filmTimer = null, filmFrame = 0, filmEl = null, t0 = performance.now();
 
+    function previewUrl(v) { return 'static/previews/' + v.replace(/^videos\//, '').replace(/\.mp4$/, '.jpg'); }
     function resize() {
-      W = canvas.clientWidth || 900; H = 620;
+      W = canvas.clientWidth || 900; H = 680;
       canvas.width = W * dpr; canvas.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       if (sim) { setCenters(); sim.alpha(0.5).restart(); }
     }
     function setCenters() {
       const srcs = Object.keys(COLORS), n = srcs.length;
-      srcs.forEach((s, i) => { const a = -Math.PI / 2 + i * 2 * Math.PI / n; COLORS[s + '_cx'] = W / 2 + Math.cos(a) * W * 0.27; COLORS[s + '_cy'] = H / 2 + Math.sin(a) * H * 0.22; });
+      srcs.forEach((s, i) => { const a = -Math.PI / 2 + i * 2 * Math.PI / n; COLORS[s + '_cx'] = W / 2 + Math.cos(a) * W * 0.26; COLORS[s + '_cy'] = H / 2 + Math.sin(a) * H * 0.14; });
     }
     function esc(s) { return String(s).replace(/[&<>]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;'}[c])); }
     function catLine(c) { return Object.entries(c).map(([k, v]) => esc(k.replace(/_/g, ' ')) + ': ' + esc(Array.isArray(v) ? v.join(', ') : v)).join(' &middot; '); }
     function fmtDur(d) { return d >= 60 ? Math.floor(d / 60) + ' min ' + (d % 60) + ' s' : d + ' s'; }
-    function showTip(d, x, y) {
+    function stopFilm() { if (filmTimer) clearInterval(filmTimer); filmTimer = null; filmEl = null; }
+    function startFilm(d) {
+      stopFilm(); filmFrame = 0; filmEl = tip.querySelector('.film');
+      const bar = filmEl.querySelector('.fbar'), tm = filmEl.querySelector('.ftime');
+      const step = () => { filmFrame = (filmFrame + 1) % NFRAMES; filmEl.style.backgroundPosition = (filmFrame * 100 / (NFRAMES - 1)) + '% 0'; bar.style.width = ((filmFrame + 1) * 100 / NFRAMES) + '%'; tm.textContent = fmtDur(Math.round(d.d * (filmFrame + 0.5) / NFRAMES)); };
+      step(); filmTimer = setInterval(step, 450);
+    }
+    function showTip(d, x, y, play) {
       const letter = d.a;
       const opts = d.o.length ? '<ol class="opt" type="A">' + d.o.map(o => { const m = o.match(/^\(?([A-Z])[.)]?\s*(.*)$/); const l = m ? m[1] : null; const txt = m ? m[2] : o; return '<li class="' + (l === letter ? 'ok' : '') + '">' + esc(txt) + '</li>'; }).join('') + '</ol>' : '';
-      tip.innerHTML = '<div style="color:' + COLORS[d.s] + ';font-weight:bold">' + esc(d.s) + ' <span style="color:#888;font-weight:normal">' + esc(d.id) + '</span></div>'
+      stopFilm();
+      tip.innerHTML = (play ? '<video controls autoplay muted playsinline preload="metadata" poster="' + previewUrl(d.v) + '" src="' + HF + d.v + '"></video>'
+        : '<div class="film" style="background-image:url(\'' + previewUrl(d.v) + '\')"><div class="fbar"></div><div class="ftime"></div></div>')
+        + '<div style="color:' + COLORS[d.s] + ';font-weight:bold">' + esc(d.s) + ' <span style="color:#888;font-weight:normal">' + esc(d.id) + '</span></div>'
         + '<div style="margin:.3em 0"><b>' + esc(d.q) + '</b></div>' + opts
         + '<div class="meta">Answer: <b>' + esc(d.a) + '</b> &middot; video ' + fmtDur(d.d) + ' (' + d.b + ')<br>' + catLine(d.c)
-        + '<br><a href="' + HF + d.v + '" target="_blank" style="pointer-events:auto">open video on Hugging Face</a></div>';
-      tip.style.display = 'block';
-      const r = canvas.getBoundingClientRect(); let tx = x + 14, ty = y + 14;
-      if (tx + 430 > r.width) tx = x - 434; if (ty + tip.offsetHeight > H) ty = Math.max(0, H - tip.offsetHeight - 4);
+        + '<br><a href="' + HF + d.v + '" target="_blank" style="pointer-events:auto">open video on Hugging Face</a>' + (play ? '' : ' &middot; <span style="color:#999">click the node to play the video</span>') + '</div>';
+      tip.style.display = 'block'; tip.style.pointerEvents = play ? 'auto' : 'none';
+      const r = canvas.getBoundingClientRect(); let tx = x + 16, ty = y + 16;
+      if (tx + tip.offsetWidth > r.width) tx = x - tip.offsetWidth - 16; if (tx < 0) tx = 4;
+      if (ty + tip.offsetHeight > H) ty = Math.max(0, H - tip.offsetHeight - 4);
       tip.style.left = tx + 'px'; tip.style.top = ty + 'px';
+      if (!play) startFilm(d);
     }
+    function hideTip() { tip.style.display = 'none'; tip.style.pointerEvents = 'none'; const v = tip.querySelector('video'); if (v) { v.pause(); v.removeAttribute('src'); v.load(); } tip.innerHTML = ''; stopFilm(); }
     function draw() {
       ctx.clearRect(0, 0, W, H);
+      const act = hover || pinned;
       ctx.lineWidth = 0.7;
       for (const l of links) {
         if (hidden.has(l.source.s)) continue;
-        ctx.strokeStyle = COLORS[l.source.s]; ctx.globalAlpha = l.same ? 0.55 : 0.18;
+        const touch = act && (l.source === act || l.target === act);
+        ctx.strokeStyle = touch ? '#222' : COLORS[l.source.s]; ctx.globalAlpha = touch ? 0.9 : (l.same ? 0.5 : 0.16); ctx.lineWidth = touch ? 1.4 : 0.7;
         ctx.beginPath(); ctx.moveTo(l.source.x, l.source.y); ctx.lineTo(l.target.x, l.target.y); ctx.stroke();
       }
       ctx.globalAlpha = 1;
+      const t = (performance.now() - t0) / 1000;
       for (const d of nodes) {
         if (hidden.has(d.s)) continue;
-        const act = d === hover || d === pinned;
-        ctx.beginPath(); ctx.arc(d.x, d.y, act ? 8 : 4, 0, 2 * Math.PI);
-        ctx.fillStyle = COLORS[d.s]; ctx.fill(); ctx.strokeStyle = act ? '#222' : '#fff'; ctx.lineWidth = act ? 2 : 0.8; ctx.stroke();
+        const isAct = d === hover || d === pinned, sib = act && d.v === act.v && !isAct;
+        const r = isAct ? 8 : sib ? 6 : 4 + 0.6 * Math.sin(t * 1.3 + d.ph);
+        ctx.beginPath(); ctx.arc(d.x, d.y, r, 0, 2 * Math.PI);
+        ctx.fillStyle = COLORS[d.s]; ctx.fill(); ctx.strokeStyle = isAct || sib ? '#222' : '#fff'; ctx.lineWidth = isAct ? 2 : sib ? 1.4 : 0.8; ctx.stroke();
+      }
+      if (mouse && !drag) { ctx.beginPath(); ctx.arc(mouse.x, mouse.y, 34, 0, 2 * Math.PI); ctx.strokeStyle = 'rgba(47,111,219,.18)'; ctx.lineWidth = 1; ctx.stroke(); }
+    }
+    function mouseForce(alpha) {
+      if (!mouse || drag) return;
+      for (const d of nodes) {
+        const dx = d.x - mouse.x, dy = d.y - mouse.y, dist = Math.hypot(dx, dy) || 1;
+        if (dist < 34 && d !== hover) { const f = (34 - dist) / 34 * 0.9; d.vx += dx / dist * f; d.vy += dy / dist * f; }
       }
     }
     function build(items) {
-      nodes = items;
+      nodes = items; nodes.forEach(d => { d.ph = Math.random() * Math.PI * 2; });
       const bySrc = d3.group(nodes, d => d.s);
       for (const [s, arr] of bySrc) {
         arr.sort((a, b) => (JSON.stringify(a.c) + a.v).localeCompare(JSON.stringify(b.c) + b.v));
@@ -529,105 +704,54 @@
       for (const [v, arr] of d3.group(nodes, d => d.v)) for (let i = 1; i < arr.length; i++) links.push({source: arr[0], target: arr[i], same: true});
       resize(); setCenters();
       sim = d3.forceSimulation(nodes)
+        .alphaDecay(0).velocityDecay(0.4).alpha(0.3)
         .force('link', d3.forceLink(links).distance(l => l.same ? 6 : 14).strength(l => l.same ? 1 : 0.25))
         .force('charge', d3.forceManyBody().strength(-9))
-        .force('x', d3.forceX(d => COLORS[d.s + '_cx']).strength(0.09))
-        .force('y', d3.forceY(d => COLORS[d.s + '_cy']).strength(0.09))
+        .force('x', d3.forceX(d => COLORS[d.s + '_cx']).strength(0.11))
+        .force('y', d3.forceY(d => COLORS[d.s + '_cy']).strength(0.13))
         .force('collide', d3.forceCollide(5.2))
+        .force('mouse', mouseForce)
+        .force('jitter', () => { for (const d of nodes) { d.vx += (Math.random() - 0.5) * 0.25; d.vy += (Math.random() - 0.5) * 0.25; } })
         .on('tick', () => { for (const d of nodes) { d.x = Math.max(8, Math.min(W - 8, d.x)); d.y = Math.max(8, Math.min(H - 8, d.y)); } draw(); });
       for (const [s, arr] of bySrc) {
         const el = document.createElement('span'); el.innerHTML = '<i style="background:' + COLORS[s] + '"></i>' + esc(s) + ' (' + arr.length + ')';
         el.onclick = () => { hidden.has(s) ? hidden.delete(s) : hidden.add(s); el.classList.toggle('off'); draw(); };
         legend.appendChild(el);
       }
+      function pos(ev) { const r = canvas.getBoundingClientRect(); return {x: ev.clientX - r.left, y: ev.clientY - r.top}; }
       canvas.addEventListener('mousemove', ev => {
-        const r = canvas.getBoundingClientRect(), x = ev.clientX - r.left, y = ev.clientY - r.top;
-        let d = sim.find(x, y, 12); if (d && hidden.has(d.s)) d = null;
-        hover = d; if (!pinned) { if (d) showTip(d, x, y); else tip.style.display = 'none'; }
-        canvas.style.cursor = d ? 'pointer' : 'crosshair'; draw();
+        const p = pos(ev); mouse = p;
+        if (drag) { drag.fx = p.x; drag.fy = p.y; return; }
+        let d = sim.find(p.x, p.y, 12); if (d && hidden.has(d.s)) d = null;
+        if (d !== hover) { hover = d; if (!pinned) { if (d) showTip(d, p.x, p.y); else hideTip(); } }
+        else if (d && !pinned) { const r = canvas.getBoundingClientRect(); let tx = p.x + 16, ty = p.y + 16; if (tx + tip.offsetWidth > r.width) tx = p.x - tip.offsetWidth - 16; if (tx < 0) tx = 4; if (ty + tip.offsetHeight > H) ty = Math.max(0, H - tip.offsetHeight - 4); tip.style.left = tx + 'px'; tip.style.top = ty + 'px'; }
+        canvas.style.cursor = d ? 'grab' : 'crosshair';
       });
-      canvas.addEventListener('mouseleave', () => { hover = null; if (!pinned) tip.style.display = 'none'; draw(); });
+      canvas.addEventListener('mouseleave', () => { hover = null; mouse = null; if (!pinned) hideTip(); });
+      canvas.addEventListener('mousedown', ev => {
+        const p = pos(ev); const d = sim.find(p.x, p.y, 12) || hover; // nodes drift, so fall back to the hovered node
+        if (d && !hidden.has(d.s)) { drag = d; d.fx = p.x; d.fy = p.y; d.moved = false; canvas.style.cursor = 'grabbing'; ev.preventDefault(); }
+      });
+      window.addEventListener('mouseup', ev => {
+        if (!drag) return;
+        const d = drag; drag = null; d.fx = null; d.fy = null; canvas.style.cursor = 'grab';
+        const p = pos(ev);
+        if (Math.hypot(p.x - d.x, p.y - d.y) < 6) { // treat as click: pin / unpin
+          if (pinned !== d) { pinned = d; showTip(d, p.x, p.y, true); pinNote.textContent = 'pinned: click elsewhere to release'; }
+          else { pinned = null; hideTip(); pinNote.textContent = ''; }
+        }
+      });
       canvas.addEventListener('click', ev => {
-        const r = canvas.getBoundingClientRect(), x = ev.clientX - r.left, y = ev.clientY - r.top;
-        const d = sim.find(x, y, 12);
-        if (d && !hidden.has(d.s) && pinned !== d) { pinned = d; showTip(d, x, y); pinNote.textContent = 'pinned: click elsewhere to release'; }
-        else { pinned = null; tip.style.display = 'none'; pinNote.textContent = ''; }
-        draw();
+        const p = pos(ev); const d = sim.find(p.x, p.y, 12) || hover;
+        if (!d && pinned) { pinned = null; hideTip(); pinNote.textContent = ''; }
       });
+      canvas.addEventListener('touchstart', ev => { const t = ev.touches[0]; const p = pos(t); const d = sim.find(p.x, p.y, 16); if (d && !hidden.has(d.s)) { pinned = d; hover = d; showTip(d, p.x, p.y, true); pinNote.textContent = 'tap empty space to release'; ev.preventDefault(); } else if (pinned) { pinned = null; hover = null; hideTip(); pinNote.textContent = ''; } }, {passive: false});
       window.addEventListener('resize', resize);
+      setTimeout(() => { hint.style.opacity = 0; hint.style.transition = 'opacity 1s'; }, 6000);
     }
     fetch('static/data/metav_items.json').then(r => r.json()).then(build).catch(e => { legend.textContent = 'Could not load static/data/metav_items.json (' + e + '). Serve the page over http, e.g. python3 -m http.server.'; });
   })();
   </script>
-
-  <hr style="border: 1px solid #e0e0e0; margin: 20px auto; width: 50%;">
-
-  <section class="section pt-0" id="results">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered has-text-centered">
-        <div class="column is-full">
-          <h2 class="title is-3 has-text-centered" style="padding-top: 20px;">Results</h2>
-          <div class="content has-text-justified">
-            <h4 class="title is-5 has-text-centered" style="margin-bottom: 1rem;">Standardized comparison of five open models</h4>
-            <p>
-              Five models at 4 to 128 frames on six source benchmarks and on Meta-Video, under one fixed protocol (uniform sampling, HF backend, torchcodec, 602k max pixels, <code>.mp4</code> input, batch size 1, temperature 0; one tile per frame for InternVL3.5). Avg. is the mean over the seven source benchmarks. The grey rows reproduce the numbers reported in each model's paper. Bold marks the best frame budget per model and column.
-            </p>
-            <div class="tablewrap">
-              <table class="results">
-                <thead>
-                  <tr>
-                    <th>Model</th><th>#Frames</th><th>Video-MME</th><th>LongVideoBench</th><th>TempCompass</th><th>MMVU (val)</th><th>LVBench</th><th>MLVU</th><th>VSI-Bench</th><th>Avg.</th>
-                    <th class="metav">Meta-V short</th><th class="metav">Meta-V medium</th><th class="metav">Meta-V long</th><th class="metav metav-avg">Meta-V</th>
-                  </tr>
-                </thead>
-                <tbody>
-<tr><th rowspan="7">InternVL3.5-4B</th><td>4</td><td>54.5</td><td>52.1</td><td>69.1</td><td>46.4</td><td>38.0</td><td>59.5</td><td>46.3</td><td>52.3</td><td class="metav">35.4</td><td class="metav">24.2</td><td class="metav">32.3</td><td class="metav metav-avg">30.6</td></tr>
-<tr><td>8</td><td>57.7</td><td>54.5</td><td>68.9</td><td>46.7</td><td>38.9</td><td>60.6</td><td>50.6</td><td>54.0</td><td class="metav">45.0</td><td class="metav">32.7</td><td class="metav">35.1</td><td class="metav metav-avg">37.6</td></tr>
-<tr><td>16</td><td>60.7</td><td>56.8</td><td>71.1</td><td>48.6</td><td>41.7</td><td>63.4</td><td>55.1</td><td>56.8</td><td class="metav">50.4</td><td class="metav">36.2</td><td class="metav">37.9</td><td class="metav metav-avg">41.5</td></tr>
-<tr><td>32</td><td>63.1</td><td>58.3</td><td><b>71.3</b></td><td><b>50.8</b></td><td>42.6</td><td>67.1</td><td>56.8</td><td>58.6</td><td class="metav"><b>53.9</b></td><td class="metav">41.2</td><td class="metav">41.5</td><td class="metav metav-avg"><b>45.5</b></td></tr>
-<tr><td>64</td><td><b>64.8</b></td><td><b>59.1</b></td><td>69.8</td><td>49.9</td><td>43.1</td><td>67.7</td><td><b>57.3</b></td><td><b>58.8</b></td><td class="metav">52.7</td><td class="metav">41.1</td><td class="metav">40.1</td><td class="metav metav-avg">44.6</td></tr>
-<tr><td>128</td><td>64.1</td><td>58.8</td><td>68.9</td><td>49.3</td><td><b>44.7</b></td><td><b>68.4</b></td><td>54.7</td><td>58.4</td><td class="metav">48.1</td><td class="metav"><b>41.4</b></td><td class="metav"><b>42.2</b></td><td class="metav metav-avg">43.9</td></tr>
-<tr class="rep"><td>reported</td><td>65.4</td><td>60.8</td><td>–</td><td>–</td><td>–</td><td>70.4</td><td>–</td><td>–</td><td class="metav">–</td><td class="metav">–</td><td class="metav">–</td><td class="metav metav-avg">–</td></tr>
-<tr><th rowspan="7">Qwen3-VL-4B</th><td>4</td><td>49.0</td><td>51.5</td><td>67.8</td><td>48.5</td><td>32.5</td><td>52.7</td><td>39.1</td><td>48.7</td><td class="metav">33.0</td><td class="metav">21.4</td><td class="metav">31.4</td><td class="metav metav-avg">28.6</td></tr>
-<tr><td>8</td><td>52.9</td><td>54.4</td><td>69.4</td><td>51.8</td><td>35.4</td><td>55.0</td><td>46.2</td><td>52.2</td><td class="metav">42.5</td><td class="metav">30.5</td><td class="metav">36.1</td><td class="metav metav-avg">36.4</td></tr>
-<tr><td>16</td><td>57.0</td><td>59.0</td><td>70.3</td><td>51.4</td><td>37.2</td><td>58.1</td><td>50.8</td><td>54.8</td><td class="metav">52.2</td><td class="metav">42.7</td><td class="metav">37.9</td><td class="metav metav-avg">44.3</td></tr>
-<tr><td>32</td><td>61.4</td><td>60.2</td><td><b>70.9</b></td><td>52.7</td><td>40.9</td><td>62.5</td><td>54.6</td><td>57.6</td><td class="metav">58.6</td><td class="metav">49.6</td><td class="metav">41.8</td><td class="metav metav-avg">50.0</td></tr>
-<tr><td>64</td><td>64.1</td><td>61.3</td><td>70.6</td><td>53.2</td><td>40.5</td><td>66.1</td><td>57.6</td><td>59.1</td><td class="metav">61.7</td><td class="metav">53.5</td><td class="metav"><b>43.2</b></td><td class="metav metav-avg">52.8</td></tr>
-<tr><td>128</td><td><b>67.5</b></td><td><b>64.0</b></td><td>69.9</td><td><b>53.4</b></td><td><b>43.8</b></td><td><b>70.4</b></td><td><b>58.9</b></td><td><b>61.1</b></td><td class="metav"><b>67.3</b></td><td class="metav"><b>57.1</b></td><td class="metav">41.4</td><td class="metav metav-avg"><b>55.3</b></td></tr>
-<tr class="rep"><td>reported</td><td>69.3</td><td>–</td><td>–</td><td>50.5</td><td>56.2</td><td>75.3</td><td>–</td><td>–</td><td class="metav">–</td><td class="metav">–</td><td class="metav">–</td><td class="metav metav-avg">–</td></tr>
-<tr><th rowspan="7">Qwen2.5-VL-7B</th><td>4</td><td>50.1</td><td>50.3</td><td>64.5</td><td>46.2</td><td>28.1</td><td>51.9</td><td>26.8</td><td>45.4</td><td class="metav">26.7</td><td class="metav">22.7</td><td class="metav">25.1</td><td class="metav metav-avg">24.8</td></tr>
-<tr><td>8</td><td>53.4</td><td>52.7</td><td>70.4</td><td>48.4</td><td>33.1</td><td>54.5</td><td>30.5</td><td>49.0</td><td class="metav">30.2</td><td class="metav">26.6</td><td class="metav">27.9</td><td class="metav metav-avg">28.2</td></tr>
-<tr><td>16</td><td>58.1</td><td>56.2</td><td>71.8</td><td>50.8</td><td>34.7</td><td>56.3</td><td>33.5</td><td>51.6</td><td class="metav">35.1</td><td class="metav">36.0</td><td class="metav">29.0</td><td class="metav metav-avg">33.4</td></tr>
-<tr><td>32</td><td>61.4</td><td>58.7</td><td>73.3</td><td>49.7</td><td>37.4</td><td>59.5</td><td>36.7</td><td>53.8</td><td class="metav">42.1</td><td class="metav">33.3</td><td class="metav">29.3</td><td class="metav metav-avg">34.9</td></tr>
-<tr><td>64</td><td>63.5</td><td><b>60.2</b></td><td><b>74.2</b></td><td>51.8</td><td>39.3</td><td>63.4</td><td>37.7</td><td>55.7</td><td class="metav">44.9</td><td class="metav">40.1</td><td class="metav">33.6</td><td class="metav metav-avg">39.5</td></tr>
-<tr><td>128</td><td><b>65.6</b></td><td><b>60.2</b></td><td>73.4</td><td><b>51.9</b></td><td><b>42.1</b></td><td><b>66.1</b></td><td><b>38.3</b></td><td><b>56.8</b></td><td class="metav"><b>46.1</b></td><td class="metav"><b>41.3</b></td><td class="metav"><b>34.3</b></td><td class="metav metav-avg"><b>40.6</b></td></tr>
-<tr class="rep"><td>reported</td><td>65.1</td><td>56.0</td><td>71.7</td><td>50.1</td><td>45.3</td><td>70.2</td><td>–</td><td>–</td><td class="metav">–</td><td class="metav">–</td><td class="metav">–</td><td class="metav metav-avg">–</td></tr>
-<tr><th rowspan="7">InternVL3.5-8B</th><td>4</td><td>56.7</td><td>55.0</td><td>69.4</td><td>55.7</td><td>38.7</td><td>58.2</td><td>47.2</td><td>54.4</td><td class="metav">38.3</td><td class="metav">31.4</td><td class="metav">35.3</td><td class="metav metav-avg">35.0</td></tr>
-<tr><td>8</td><td>60.0</td><td>56.4</td><td>70.2</td><td>55.4</td><td>39.6</td><td>62.5</td><td>50.3</td><td>56.3</td><td class="metav">46.5</td><td class="metav">40.7</td><td class="metav">41.3</td><td class="metav metav-avg">42.8</td></tr>
-<tr><td>16</td><td>63.0</td><td>57.5</td><td>70.6</td><td>57.7</td><td>40.6</td><td>63.7</td><td>55.1</td><td>58.3</td><td class="metav">50.4</td><td class="metav">46.1</td><td class="metav">43.5</td><td class="metav metav-avg">46.7</td></tr>
-<tr><td>32</td><td>64.7</td><td>59.9</td><td><b>70.8</b></td><td>56.4</td><td>41.8</td><td>67.7</td><td><b>55.9</b></td><td>59.6</td><td class="metav">56.0</td><td class="metav">48.3</td><td class="metav">47.0</td><td class="metav metav-avg">50.4</td></tr>
-<tr><td>64</td><td><b>66.2</b></td><td><b>62.9</b></td><td>70.5</td><td><b>59.9</b></td><td>43.8</td><td><b>68.5</b></td><td>55.8</td><td><b>61.1</b></td><td class="metav"><b>59.1</b></td><td class="metav">50.9</td><td class="metav">46.3</td><td class="metav metav-avg">52.1</td></tr>
-<tr><td>128</td><td>65.1</td><td>61.6</td><td>70.1</td><td>58.3</td><td><b>46.2</b></td><td><b>68.5</b></td><td>54.2</td><td>60.6</td><td class="metav">55.1</td><td class="metav"><b>51.2</b></td><td class="metav"><b>50.5</b></td><td class="metav metav-avg"><b>52.3</b></td></tr>
-<tr class="rep"><td>reported</td><td>66.0</td><td>62.1</td><td>–</td><td>–</td><td>–</td><td>70.2</td><td>–</td><td>–</td><td class="metav">–</td><td class="metav">–</td><td class="metav">–</td><td class="metav metav-avg">–</td></tr>
-<tr><th rowspan="7">Qwen3-VL-8B</th><td>4</td><td>53.0</td><td>52.2</td><td>70.7</td><td>53.8</td><td>33.6</td><td>53.0</td><td>41.4</td><td>51.1</td><td class="metav">37.1</td><td class="metav">28.8</td><td class="metav">41.7</td><td class="metav metav-avg">35.9</td></tr>
-<tr><td>8</td><td>56.1</td><td>55.9</td><td>72.3</td><td>56.7</td><td>36.0</td><td>54.7</td><td>47.5</td><td>54.2</td><td class="metav">44.6</td><td class="metav">36.9</td><td class="metav">44.2</td><td class="metav metav-avg">41.9</td></tr>
-<tr><td>16</td><td>60.3</td><td>58.0</td><td>73.2</td><td>58.4</td><td>37.4</td><td>59.2</td><td>51.4</td><td>56.8</td><td class="metav">56.4</td><td class="metav">44.7</td><td class="metav">49.8</td><td class="metav metav-avg">50.3</td></tr>
-<tr><td>32</td><td>64.6</td><td>59.5</td><td><b>74.4</b></td><td><b>59.5</b></td><td>39.8</td><td>63.1</td><td>55.8</td><td>59.5</td><td class="metav">61.5</td><td class="metav">51.9</td><td class="metav">51.6</td><td class="metav metav-avg">55.0</td></tr>
-<tr><td>64</td><td>66.5</td><td>63.0</td><td>73.2</td><td>58.5</td><td>42.9</td><td>68.2</td><td>59.0</td><td>61.6</td><td class="metav"><b>65.5</b></td><td class="metav">55.8</td><td class="metav">50.9</td><td class="metav metav-avg">57.4</td></tr>
-<tr><td>128</td><td><b>69.2</b></td><td><b>63.6</b></td><td>74.2</td><td>58.7</td><td><b>46.5</b></td><td><b>72.1</b></td><td><b>59.7</b></td><td><b>63.4</b></td><td class="metav">62.5</td><td class="metav"><b>60.9</b></td><td class="metav"><b>53.4</b></td><td class="metav metav-avg"><b>58.9</b></td></tr>
-<tr class="rep"><td>reported</td><td>71.4</td><td>–</td><td>–</td><td>58.7</td><td>58.0</td><td>78.1</td><td>–</td><td>–</td><td class="metav">–</td><td class="metav">–</td><td class="metav">–</td><td class="metav metav-avg">–</td></tr>
-                </tbody>
-              </table>
-            </div>
-            <p>
-              Qwen3-VL is the strongest backbone in both the 4B and the 7&ndash;8B range. Frame count changes rankings: the Qwen models improve almost monotonically up to 128 frames, whereas InternVL3.5 peaks at 32&ndash;64 frames and then declines. InternVL3.5-4B beats Qwen3-VL-4B at every frame count up to 32; the order flips at 64 frames and at 128 frames Qwen3-VL-4B leads by 2.9pp. Meta-Video reproduces these trends at a fraction of the cost.
-            </p>
-
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <hr style="border: 1px solid #e0e0e0; margin: 20px auto; width: 50%;">
 
@@ -684,11 +808,11 @@ python eval_scripts/score_metav.py --write logs/runs/metav_protocol/metav/*/*/*/
   <section class="section pt-0" id="cite">
     <div class="container is-max-desktop content">
       <h2 class="title has-text-centered" style="padding-top: 20px;">BibTeX</h2>
-      <pre class="selectable"><code>@misc{jahagirdar2026metavideo,
+      <pre class="selectable"><code>@article{jahagirdar2026metavideo,
   title={Meta-Video: Efficient Standardized Evaluation for Video Understanding},
   author={Jahagirdar, Soumya Shamarao and Kukleva, Anna and Udandarao, Vishaal and Thomas, Samuel and Kingsbury, Brian and Feris, Rogerio and Glass, James R. and Prabhu, Ameya and Kuehne, Hilde},
-  year={2026},
-  note={Preprint}
+  journal={arXiv preprint arXiv:2610.18535},
+  year={2026}
 }</code></pre>
     </div>
   </section>
