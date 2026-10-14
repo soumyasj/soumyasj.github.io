@@ -398,7 +398,6 @@
             </p>
             <div class="ds-tabs" id="ds-tabs"></div>
             <div class="kc-wrap" id="kc-wrap"></div>
-            <p class="figcap" style="margin-top: 1em;">Accuracies are Table 2 of the paper; compute is the wall-clock seconds per question of the same runs on one L40S GPU, averaged over seeds where the paper averages. Which of these settings produced a given score is what the <a href="#evalcard">evaluation card</a> below records.</p>
           </div>
         </div>
       </div>
@@ -420,7 +419,7 @@
        note: 'Scores within one backend are stable across batch sizes (mean std. 0.15pp), but HF and vLLM differ by 4&ndash;6pp on TempCompass, MVBench and Meta-V: the evaluated vLLM path turns the video into single images and bypasses the Qwen spatiotemporal pooling. <b>Our implementation restores the pooling.</b>'},
       {title: '<span class="cfg cfg-blue">Input modality</span> &amp; <span class="cfg cfg-orange">Number of frames</span>', fixed: '602k px, uniform sampling, HF, batch 1, T=0, torchcodec', xlab: 'number of frames', x: ['4', '8', '16', '32', '64', '128'],
        series: [
-         {name: '.mp4 video', rt: [1447, 356, 1095, 777, 3675, 695], rows: [[50.0,64.4,59.2,50.3,56.0,24.8],[53.3,70.3,63.4,52.7,59.9,28.2],[58.0,71.8,66.7,56.1,63.1,33.4],[61.4,73.3,68.5,58.7,65.5,36.1],[63.5,74.1,69.0,60.2,66.7,39.2],[65.5,73.4,68.0,60.2,66.8,40.8]], cost: [[1.0, 1.0, 1.0, 1.0, 1.0, 1.0], [1.513, 1.441, 1.474, 2.117, 1.615, 1.215], [2.87, 2.404, 2.344, 3.118, 2.665, 1.729], [5.736, 4.399, 4.06, 6.039, 4.987, 2.759], [11.373, 8.256, 7.165, 12.415, 9.56, 4.915], [22.541, 16.04, 13.391, 26.013, 18.838, 9.231]]},
+         {name: '.mp4 video', rt: [1447, 356, 1095, 777, 3675, 695], rows: [[50.0,64.4,59.2,50.3,56.0,24.8],[53.3,70.3,63.4,52.7,59.9,28.2],[58.0,71.8,66.7,56.1,63.1,33.4],[61.4,73.3,68.5,58.7,65.5,36.1],[63.5,74.1,69.0,60.2,66.7,39.2],[65.6,73.4,68.0,60.2,66.8,40.8]], cost: [[1.0, 1.0, 1.0, 1.0, 1.0, 1.0], [1.513, 1.441, 1.474, 2.117, 1.615, 1.215], [2.87, 2.404, 2.344, 3.118, 2.665, 1.729], [5.736, 4.399, 4.06, 6.039, 4.987, 2.759], [11.373, 8.256, 7.165, 12.415, 9.56, 4.915], [22.541, 16.04, 13.391, 26.013, 18.838, 9.231]]},
          {name: '.jpg frames', rt: [2495, 663, 2329, 1337, 6824, 1021], rows: [[49.7,69.4,64.0,51.5,58.7,27.8],[55.7,71.4,64.8,55.1,61.8,31.3],[58.9,70.6,63.6,56.9,62.5,37.0],[61.2,70.1,62.2,57.2,62.7,37.1],[62.6,68.3,61.5,58.1,62.6,38.9],[62.7,66.8,60.6,57.5,61.9,36.5]], cost: [[0.911, 1.072, 0.979, 1.021, 0.994, 0.881], [1.866, 1.858, 1.779, 2.103, 1.898, 1.129], [3.998, 3.614, 3.506, 4.388, 3.861, 1.858], [8.46, 7.268, 7.06, 9.198, 7.949, 3.501], [18.097, 15.205, 15.323, 20.42, 17.13, 7.298], [43.536, 33.333, 34.074, 48.815, 39.416, 16.221]]}],
        note: 'Frame count is the strongest factor: 4 to 128 frames lifts Video-MME from 50.0 to 65.5 and Meta-V from 24.8 to 40.8. Pre-extracted <b>.jpg</b> frames win at low frame counts but flatten or reverse at high ones, and cost about twice the runtime; <b>.mp4</b> input goes through spatiotemporal pooling, which halves the visual tokens.'},
       {title: '<span class="cfg cfg-orange">Frame sampling</span>', fixed: '602k px, HF, batch 1, torchcodec, .mp4, T=0', xlab: 'frame budget', x: ['32', '64'],
@@ -536,19 +535,12 @@
       // best panel
       const bp = document.createElement('div'); bp.className = 'kc-best'; const bs = best.sr;
       bp.innerHTML = '<div class="bk">&#9733; Best on ' + DS[di] + '</div><div class="bv">' + fmt(best.y) + '%</div><div class="bs">' + bs.name + ' &middot; ' + PLAB[best.si](bs.x[best.i]) + '</div><dl>'
-        + '<div class="cr"><span>compute</span><span>' + fx(best.x) + '× reference</span></div>'
-        + '<div class="cr"><span>vs. reference</span><span>' + (best.y - REF[di] >= 0 ? '+' : '') + fmt(best.y - REF[di]) + 'pp</span></div>'
-        + '<div class="cr"><span>reference</span><span>' + fmt(REF[di]) + '% at 1×</span></div>'
-        + '<div class="cr"><span>sweep runtime</span><span>' + bs.rt[di] + ' min</span></div>'
         + '<div class="cr"><span>fixed</span><span style="font-weight:normal;color:#555">' + bs.fixed + '</span></div></dl>';
       row.appendChild(chartCol); row.appendChild(bp); wrap.appendChild(row);
       const lg = document.createElement('div'); lg.className = 'kc-legend';
       SER.forEach((sr, si) => { const e = document.createElement('span'); e.innerHTML = '<i style="background:' + COL[si] + ';height:' + sr.w + 'px"></i>' + sr.name; e.addEventListener('mouseenter', () => isoOn(si)); e.addEventListener('mouseleave', () => isoOff(si)); lg.appendChild(e); leg.push(e); });
       const rf = document.createElement('span'); rf.innerHTML = '<i class="dash"></i>reference configuration: ' + fmt(REF[di]) + '% at 1× (black star)'; rf.style.cursor = 'default'; lg.appendChild(rf);
       wrap.appendChild(lg);
-      const ul = document.createElement('ul'); ul.className = 'kc-notes';
-      K.forEach((k, g) => { const li = document.createElement('li'); li.innerHTML = '<i style="background:' + COL[SER.findIndex(sr => sr.g === g)] + '"></i>' + k.note; ul.appendChild(li); });
-      wrap.appendChild(ul);
     }
     DS.forEach((d, i) => { const b = document.createElement('button'); b.className = 'ds-tab' + (i === 5 ? ' metav' : '') + (i === cur ? ' active' : ''); b.textContent = d; b.onclick = () => { cur = i; [...tabs.children].forEach((c, j) => c.classList.toggle('active', j === i)); render(); }; tabs.appendChild(b); });
     render();
