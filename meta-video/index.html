@@ -110,36 +110,48 @@
     .ds-tab:hover { border-color: #2f6fdb; color: #2f6fdb; }
     .ds-tab.active { background: #2f6fdb; border-color: #2f6fdb; color: #fff; }
     .ds-tab.metav.active { background: #1d4fa8; border-color: #1d4fa8; }
-    .knob-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    @media screen and (max-width: 820px) { .knob-grid { grid-template-columns: 1fr; } }
-    .knob-card { background: #fff; border: 1px solid #e3e8f0; border-radius: 12px; padding: 12px 14px 10px; text-align: left; }
-    .knob-card .kc-title { font-weight: bold; font-size: .98em; margin-bottom: 2px; }
-    .knob-card .kc-fixed { font-size: .76em; color: #777; margin-bottom: 4px; }
-    .knob-card .kc-fixed b { color: #555; font-weight: 600; }
-    .knob-card svg { width: 100%; height: auto; display: block; overflow: visible; font-family: inherit; }
-    .knob-card .kc-legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: .8em; color: #555; margin-top: 2px; }
-    .knob-card .kc-legend span { cursor: pointer; display: inline-flex; align-items: center; gap: 5px; padding: 1px 4px; border-radius: 4px; }
-    .knob-card .kc-legend span:hover, .knob-card .kc-legend span.on { background: #f0f4fb; color: #222; }
-    .knob-card .kc-legend i { display: inline-block; width: 16px; height: 3px; border-radius: 2px; }
-    .knob-card .kc-legend i.dash { height: 0; border-top: 2px dashed #999; }
-    .knob-card .kc-note { font-size: .8em; color: #555; margin-top: 6px; line-height: 1.35; }
-    .knob-card .kc-note b { color: #333; }
-    .kc-axis { fill: #888; font-size: 10px; }
-    .kc-axis-title { fill: #666; font-size: 10.5px; }
+    .kc-wrap { background: #fff; border: 1px solid #e3e8f0; border-radius: 12px; padding: 14px 16px 10px; text-align: left; }
+    .kc-row { display: flex; gap: 18px; align-items: flex-start; flex-wrap: wrap; }
+    .kc-chart { flex: 1 1 560px; min-width: 300px; }
+    .kc-chart svg { width: 100%; height: auto; display: block; overflow: visible; font-family: inherit; }
+    .kc-best { flex: 0 0 230px; background: #f7f9fd; border: 1px solid #e3e8f0; border-radius: 10px; padding: 12px 14px; font-size: .85em; }
+    .kc-best .bk { color: #d03b3b; font-weight: 700; font-size: .8em; text-transform: uppercase; letter-spacing: .04em; }
+    .kc-best .bv { font-size: 1.9em; font-weight: 800; color: #222; line-height: 1.1; margin: 2px 0; }
+    .kc-best .bs { color: #555; }
+    .kc-best dl { margin: 10px 0 0; padding-top: 8px; border-top: 1px solid #e3e8f0; }
+    .kc-best .cr { display: flex; justify-content: space-between; gap: 8px; padding: 2px 0; font-size: .92em; }
+    .kc-best .cr span:first-child { color: #888; }
+    .kc-best .cr span:last-child { font-weight: 600; color: #222; text-align: right; }
+    .kc-legend { display: flex; flex-wrap: wrap; gap: 5px 16px; font-size: .84em; color: #555; margin-top: 10px; padding-top: 8px; border-top: 1px solid #eef1f6; }
+    .kc-legend span { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; padding: 2px 5px; margin: -2px -5px; border-radius: 5px; }
+    .kc-legend span:hover, .kc-legend span.on { background: #f0f4fb; color: #222; }
+    .kc-legend i { display: inline-block; width: 18px; border-radius: 2px; }
+    .kc-legend i.dash { height: 0 !important; border-top: 2px dashed #999; }
+    .kc-notes { font-size: .82em; color: #555; line-height: 1.4; margin: 10px 0 0 !important; padding: 0; list-style: none !important; columns: 2; column-gap: 24px; }
+    @media screen and (max-width: 820px) { .kc-notes { columns: 1; } }
+    .kc-notes li { break-inside: avoid; margin: 0 0 5px !important; padding-left: 14px; position: relative; list-style: none; }
+    .kc-notes li i { position: absolute; left: 0; top: 7px; width: 9px; height: 3px; border-radius: 2px; }
+    .kc-notes b { color: #333; }
+    .kc-axis { fill: #888; font-size: 10.5px; }
+    .kc-axis-title { fill: #666; font-size: 11px; }
+    .kc-group { fill: #333; font-size: 11.5px; font-weight: 700; }
     .kc-grid { stroke: #eceff4; stroke-width: 1; }
-    .kc-ref { stroke: #999; stroke-width: 1.3; stroke-dasharray: 5 4; fill: none; }
-    .kc-series path.line { fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; transition: stroke-width .15s; }
-    .kc-series path.halo { fill: none; stroke: #fff; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
-    .kc-series path.hit { fill: none; stroke: transparent; stroke-width: 18; cursor: pointer; }
+    .kc-sep { stroke: #d8dee8; stroke-width: 1; stroke-dasharray: 2 3; }
+    .kc-ref { stroke: #999; stroke-width: 1.3; stroke-dasharray: 6 4; fill: none; }
+    .kc-series path.line { fill: none; stroke-linecap: round; stroke-linejoin: round; transition: stroke-width .15s; }
+    .kc-series path.halo { fill: none; stroke: #fff; stroke-linecap: round; stroke-linejoin: round; }
+    .kc-series path.hit { fill: none; stroke: transparent; stroke-width: 20; cursor: pointer; }
     .kc-series circle { stroke: #fff; stroke-width: 1.6; cursor: pointer; transition: r .12s; }
-    .kc-series line.err { opacity: .75; }
-    svg.multi .kc-series text.vl { display: none; }
-    svg.dim .kc-series.on text.vl { display: block; }
-    .kc-series text.vl { font-size: 9.5px; font-weight: bold; paint-order: stroke; stroke: #fff; stroke-width: 3px; stroke-linejoin: round; pointer-events: none; }
-    svg.dim .kc-series { opacity: .18; transition: opacity .15s; }
+    .kc-series line.err { opacity: .75; pointer-events: none; }
+    .kc-series text.vl { font-size: 10px; font-weight: bold; paint-order: stroke; stroke: #fff; stroke-width: 3px; stroke-linejoin: round; pointer-events: none; display: none; }
+    .kc-series text.vl.always { display: block; }
+    svg.dim .kc-series:not(.on) text.vl.always { display: none; }
+    svg.dim .kc-series { opacity: .15; transition: opacity .15s; }
     svg.dim .kc-series.on { opacity: 1; }
-    svg.dim .kc-series.on path.line { stroke-width: 3.4; }
-    .kc-best { fill: #d03b3b; stroke: #fff; stroke-width: 1.2; pointer-events: none; }
+    svg.dim .kc-series.on path.line { stroke-width: calc(var(--kw) * 1px + 1.5px); }
+    svg.dim .kc-series.on text.vl { display: block; }
+    .kc-star { fill: #d03b3b; stroke: #fff; stroke-width: 1.3; pointer-events: none; }
+    .kc-star.base { fill: #222; }
     #kc-tip { position: fixed; pointer-events: none; z-index: 60; background: #1f1f1e; color: #fff; font-size: .8em; padding: 6px 9px; border-radius: 6px; opacity: 0; transition: opacity .08s; white-space: nowrap; box-shadow: 0 4px 14px rgba(0,0,0,.3); text-align: left; line-height: 1.35; }
     #kc-tip b { color: #fff; }
     #kc-tip .mut { color: #bbb; }
@@ -382,11 +394,11 @@
           <h2 class="title is-3 has-text-centered" style="padding-top: 20px;">Standardizing Evaluations for Video Understanding</h2>
           <div class="content has-text-justified">
             <p>
-              Sensitivity of <strong>Qwen2.5-VL-7B</strong> to the evaluation settings. Each panel varies one setting while every other setting stays at the reference configuration (dashed line: HF backend, batch size 1, 4 uniformly sampled frames, torchcodec, 602k max pixels, <code>.mp4</code> input, temperature 0, official <code>lmms_eval</code> prompt). Pick a benchmark, then <strong>hover</strong> a point, line or legend entry for the exact number; whiskers are the standard deviation over repeated runs, the red star marks the best setting of the panel. <em>Avg.</em> is the mean over Video-MME, TempCompass, MVBench and LongVideoBench; runtimes are the total minutes of all runs in a panel.
+              Sensitivity of <strong>Qwen2.5-VL-7B</strong> to every evaluation setting, in one chart per benchmark: <strong>x is what a setting costs</strong>, <strong>y is what it scores</strong>. Every run of Table 2 of the paper is re-expressed on a shared compute axis, the measured seconds per question relative to the reference run (1&times;, black star; log scale), so moving right always means spending more. Each colored line is one swept parameter; thick lines are the resource knobs (frames, input modality), thin lines the implementation and decoding knobs. The reference configuration is HF backend, batch size 1, 4 uniformly sampled frames, torchcodec, 602k max pixels, <code>.mp4</code> input, temperature 0 and the official <code>lmms_eval</code> prompt (dashed line). <strong>Hover</strong> a line, a point or a legend entry to isolate it and read the exact accuracy, the standard deviation over repeated runs where the paper reports one, the cost multiplier and the total runtime of that sweep; the red star marks the best setting for the benchmark. <em>Avg.</em> is the mean accuracy over Video-MME, TempCompass, MVBench and LongVideoBench, with the geometric mean of their cost multipliers.
             </p>
             <div class="ds-tabs" id="ds-tabs"></div>
-            <div class="knob-grid" id="knob-grid"></div>
-            <p class="figcap" style="margin-top: 1em;">Numbers are Table 2 of the paper. Which of these settings produced a given score is what the <a href="#evalcard">evaluation card</a> below records.</p>
+            <div class="kc-wrap" id="kc-wrap"></div>
+            <p class="figcap" style="margin-top: 1em;">Accuracies are Table 2 of the paper; compute is the wall-clock seconds per question of the same runs on one L40S GPU, averaged over seeds where the paper averages. Which of these settings produced a given score is what the <a href="#evalcard">evaluation card</a> below records.</p>
           </div>
         </div>
       </div>
@@ -402,107 +414,141 @@
     const K = [
       {title: '<span class="cfg cfg-green">Inference backend</span> &amp; <span class="cfg cfg-green">Batch size</span>', fixed: '602k px, uniform sampling, torchcodec, .mp4, T=0, 4 frames', xlab: 'batch size', x: ['1', '4', '8', '16', '32'],
        series: [
-         {name: 'HF', rt: [157, 46.6, 166, 77.2, 447, 133], rows: [[50.0,64.4,59.2,50.3,56.0,24.8],[50.0,64.7,59.6,50.5,56.2,24.4],[50.0,65.0,59.3,50.7,56.2,24.1],[50.1,64.8,59.2,50.4,56.1,24.6],[50.0,64.9,59.3,50.4,56.1,24.6]]},
-         {name: 'vLLM', rt: [155, 55.6, 257, 84, 551, 112], rows: [[50.4,69.0,64.4,52.1,58.9,31.0],[50.3,69.2,64.4,51.9,59.0,30.5],[50.2,69.2,64.3,51.9,58.9,30.6],[50.3,69.2,64.4,51.7,58.9,30.4],[50.3,69.1,64.3,51.8,58.9,30.4]],
+         {name: 'HF', rt: [157, 46.6, 166, 77.2, 447, 133], rows: [[50.0,64.4,59.2,50.3,56.0,24.8],[50.0,64.7,59.6,50.5,56.2,24.4],[50.0,65.0,59.3,50.7,56.2,24.1],[50.1,64.8,59.2,50.4,56.1,24.6],[50.0,64.9,59.3,50.4,56.1,24.6]], cost: [[1.0, 1.0, 1.0, 1.0, 1.0, 1.0], [0.926, 0.829, 0.867, 0.935, 0.888, 0.765], [0.93, 0.833, 0.848, 0.949, 0.889, 0.768], [1.062, 0.849, 0.844, 0.946, 0.921, 0.736], [0.932, 0.864, 0.852, 0.977, 0.905, 0.73]]},
+         {name: 'vLLM', rt: [155, 55.6, 257, 84, 551, 112], rows: [[50.4,69.0,64.4,52.1,58.9,31.0],[50.3,69.2,64.4,51.9,59.0,30.5],[50.2,69.2,64.3,51.9,58.9,30.6],[50.3,69.2,64.4,51.7,58.9,30.4],[50.3,69.1,64.3,51.8,58.9,30.4]], cost: [[1.39, 1.452, 2.179, 1.717, 1.658, 1.113], [0.963, 1.019, 1.51, 1.341, 1.187, 0.66], [0.828, 0.87, 1.403, 1.271, 1.065, 0.558], [0.803, 0.789, 1.355, 1.206, 1.009, 0.493], [0.811, 0.815, 1.299, 1.17, 1.001, 0.501]],
           sd: [[.1,.1,.1,.1,null,.1],[0,.2,0,.2,null,.2],[.2,.2,.2,.1,null,.5],[.1,.4,.2,0,null,.3],[.1,.1,.1,.1,null,.1]]}],
        note: 'Scores within one backend are stable across batch sizes (mean std. 0.15pp), but HF and vLLM differ by 4&ndash;6pp on TempCompass, MVBench and Meta-V: the evaluated vLLM path turns the video into single images and bypasses the Qwen spatiotemporal pooling. <b>Our implementation restores the pooling.</b>'},
       {title: '<span class="cfg cfg-blue">Input modality</span> &amp; <span class="cfg cfg-orange">Number of frames</span>', fixed: '602k px, uniform sampling, HF, batch 1, T=0, torchcodec', xlab: 'number of frames', x: ['4', '8', '16', '32', '64', '128'],
        series: [
-         {name: '.mp4 video', rt: [1447, 356, 1095, 777, 3675, 695], rows: [[50.0,64.4,59.2,50.3,56.0,24.8],[53.3,70.3,63.4,52.7,59.9,28.2],[58.0,71.8,66.7,56.1,63.1,33.4],[61.4,73.3,68.5,58.7,65.5,36.1],[63.5,74.1,69.0,60.2,66.7,39.2],[65.5,73.4,68.0,60.2,66.8,40.8]]},
-         {name: '.jpg frames', rt: [2495, 663, 2329, 1337, 6824, 1021], rows: [[49.7,69.4,64.0,51.5,58.7,27.8],[55.7,71.4,64.8,55.1,61.8,31.3],[58.9,70.6,63.6,56.9,62.5,37.0],[61.2,70.1,62.2,57.2,62.7,37.1],[62.6,68.3,61.5,58.1,62.6,38.9],[62.7,66.8,60.6,57.5,61.9,36.5]]}],
+         {name: '.mp4 video', rt: [1447, 356, 1095, 777, 3675, 695], rows: [[50.0,64.4,59.2,50.3,56.0,24.8],[53.3,70.3,63.4,52.7,59.9,28.2],[58.0,71.8,66.7,56.1,63.1,33.4],[61.4,73.3,68.5,58.7,65.5,36.1],[63.5,74.1,69.0,60.2,66.7,39.2],[65.5,73.4,68.0,60.2,66.8,40.8]], cost: [[1.0, 1.0, 1.0, 1.0, 1.0, 1.0], [1.513, 1.441, 1.474, 2.117, 1.615, 1.215], [2.87, 2.404, 2.344, 3.118, 2.665, 1.729], [5.736, 4.399, 4.06, 6.039, 4.987, 2.759], [11.373, 8.256, 7.165, 12.415, 9.56, 4.915], [22.541, 16.04, 13.391, 26.013, 18.838, 9.231]]},
+         {name: '.jpg frames', rt: [2495, 663, 2329, 1337, 6824, 1021], rows: [[49.7,69.4,64.0,51.5,58.7,27.8],[55.7,71.4,64.8,55.1,61.8,31.3],[58.9,70.6,63.6,56.9,62.5,37.0],[61.2,70.1,62.2,57.2,62.7,37.1],[62.6,68.3,61.5,58.1,62.6,38.9],[62.7,66.8,60.6,57.5,61.9,36.5]], cost: [[0.911, 1.072, 0.979, 1.021, 0.994, 0.881], [1.866, 1.858, 1.779, 2.103, 1.898, 1.129], [3.998, 3.614, 3.506, 4.388, 3.861, 1.858], [8.46, 7.268, 7.06, 9.198, 7.949, 3.501], [18.097, 15.205, 15.323, 20.42, 17.13, 7.298], [43.536, 33.333, 34.074, 48.815, 39.416, 16.221]]}],
        note: 'Frame count is the strongest factor: 4 to 128 frames lifts Video-MME from 50.0 to 65.5 and Meta-V from 24.8 to 40.8. Pre-extracted <b>.jpg</b> frames win at low frame counts but flatten or reverse at high ones, and cost about twice the runtime; <b>.mp4</b> input goes through spatiotemporal pooling, which halves the visual tokens.'},
       {title: '<span class="cfg cfg-orange">Frame sampling</span>', fixed: '602k px, HF, batch 1, torchcodec, .mp4, T=0', xlab: 'frame budget', x: ['32', '64'],
        series: [
-         {name: 'Uniform (exactly n frames)', rt: [542, 134, 413, 286, 1375, 356], rows: [[61.4,73.3,68.6,58.7,65.5,36.1],[63.5,74.2,69.0,60.2,66.7,39.2]]},
-         {name: '1 fps (capped at n frames)', rt: [542, 37.7, 135, 238, 953, 241], rows: [[61.5,69.9,64.1,57.7,63.3,34.9],[63.5,69.9,64.0,58.7,64.0,39.4]]}],
+         {name: 'Uniform (exactly n frames)', rt: [542, 134, 413, 286, 1375, 356], rows: [[61.4,73.3,68.6,58.7,65.5,36.1],[63.5,74.2,69.0,60.2,66.7,39.2]], cost: [[5.736, 4.399, 4.06, 6.039, 4.987, 2.759], [11.373, 8.256, 7.165, 12.415, 9.56, 4.915]]},
+         {name: '1 fps (capped at n frames)', rt: [542, 37.7, 135, 238, 953, 241], rows: [[61.5,69.9,64.1,57.7,63.3,34.9],[63.5,69.9,64.0,58.7,64.0,39.4]], cost: [[5.739, 1.77, 2.351, 5.265, 3.348, 2.626], [10.957, 1.781, 2.488, 10.071, 4.702, 4.534]]}],
        note: 'Sampling at 1 fps instead of uniformly has no effect on Video-MME, but on the short clips of TempCompass and MVBench it lowers accuracy by 3.4&ndash;5.0pp. Uniform sampling is better on average, so dense sampling helps even on short videos. The evaluated lmms_eval exposes a frame cap that its backends do not enforce; <b>ours enforces it</b>.'},
       {title: '<span class="cfg cfg-orange">Video decoder</span>', fixed: '602k px, uniform sampling, HF, batch 1, .mp4, T=0, 4 frames', xlab: 'video reader', x: ['decord', 'torchvision', 'torchcodec'],
        series: [
-         {name: 'decoder', rt: [100, 30.0, 104, 44, 278, 97.9], rows: [[50.1,64.5,59.4,50.4,56.1,25.2],[50.4,57.5,49.1,48.7,51.4,24.9],[50.1,64.4,59.2,50.3,56.0,24.8]]}],
+         {name: 'decoder', rt: [100, 30.0, 104, 44, 278, 97.9], rows: [[50.1,64.5,59.4,50.4,56.1,25.2],[50.4,57.5,49.1,48.7,51.4,24.9],[50.1,64.4,59.2,50.3,56.0,24.8]], cost: [[1.197, 0.972, 1.069, 1.131, 1.089, 1.007], [0.911, 0.851, 0.671, 0.738, 0.787, 0.932], [1.0, 1.0, 1.0, 1.0, 1.0, 1.0]]}],
        note: 'Decoders differ in timestamp handling and keyframe resolution, so they extract different frames at the same settings. The choice changes scores (torchvision drops MVBench by 10pp and TempCompass by 7pp) but not the model ranking. We use torchcodec, the lmms_eval default, and <b>recommend reporting the decoder</b>.'},
       {title: '<span class="cfg cfg-orange">Frame resolution</span>', fixed: 'uniform sampling, HF, batch 1, torchcodec, .mp4, T=0, 4 frames', xlab: 'max pixels per frame', x: ['200,704', '301,056', '602,112'],
        series: [
-         {name: 'max pixels', rt: [82.5, 30.8, 101, 40.7, 255, 95.3], rows: [[49.4,65.5,59.3,50.1,56.1,24.9],[50.1,64.5,59.0,50.5,56.0,25.2],[50.1,64.5,59.2,50.3,56.0,24.9]]}],
+         {name: 'max pixels', rt: [82.5, 30.8, 101, 40.7, 255, 95.3], rows: [[49.4,65.5,59.3,50.1,56.1,24.9],[50.1,64.5,59.0,50.5,56.0,25.2],[50.1,64.5,59.2,50.3,56.0,24.9]], cost: [[0.792, 0.935, 0.819, 0.912, 0.862, 0.91], [0.774, 0.958, 0.852, 0.749, 0.829, 0.948], [1.0, 1.0, 1.0, 1.0, 1.0, 1.0]]}],
        note: 'Frames are resized so their area stays below the pixel budget, which sets the number of visual tokens per frame. Among the tested budgets the variation is under 1pp: <b>resolution does not change results significantly</b> at this frame count.'},
       {title: '<span class="cfg cfg-blue">Decoding temperature</span>', fixed: '602k px, uniform sampling, HF, batch 1, torchcodec, .mp4, 4 frames', xlab: 'temperature T', x: ['0', '0.7', '0.8', '0.9', '1.0'],
        series: [
-         {name: 'temperature', rt: [172, 62.1, 169, 58.7, 461, 169], rows: [[50.0,64.4,59.2,50.3,56.0,24.8],[47.1,65.0,56.9,47.2,54.0,25.9],[46.3,63.9,56.1,45.9,53.0,25.5],[45.6,62.8,55.6,43.4,51.9,25.3],[44.9,61.5,54.4,43.3,51.0,24.9]],
+         {name: 'temperature', rt: [172, 62.1, 169, 58.7, 461, 169], rows: [[50.0,64.4,59.2,50.3,56.0,24.8],[47.1,65.0,56.9,47.2,54.0,25.9],[46.3,63.9,56.1,45.9,53.0,25.5],[45.6,62.8,55.6,43.4,51.9,25.3],[44.9,61.5,54.4,43.3,51.0,24.9]], cost: [[1.0, 1.0, 1.0, 1.0, 1.0, 1.0], [1.0, 0.989, 0.927, 0.95, 0.966, 1.012], [1.049, 0.986, 0.92, 0.959, 0.978, 1.055], [1.103, 0.983, 0.948, 0.967, 0.999, 1.047], [1.178, 0.998, 0.842, 0.972, 0.99, 1.028]],
           sd: [[null,null,null,null,null,null],[.4,3.0,.5,1.1,null,1.1],[1.3,3.9,.8,1.2,null,1.4],[1.1,3.5,.2,0,null,.3],[.3,3.9,.2,1.0,null,1.2]]}],
        note: 'Greedy decoding (T=0) is best and deterministic. Sampling lowers accuracy almost monotonically (Video-MME 50.0 at T=0 to 44.9 at T=1) and adds run-to-run variance of up to 3.9pp on TempCompass. <b>Report T=0 unless the method needs sampling.</b>'}
     ];
 
-    const tabs = document.getElementById('ds-tabs'), grid = document.getElementById('knob-grid'), tip = document.getElementById('kc-tip');
+    const GROUPS = ['Inference backend & batch size', 'Input modality & number of frames', 'Frame sampling', 'Video decoder', 'Frame resolution', 'Decoding temperature'];
+    const XLAB = ['batch size', 'frames', 'frames', 'decoder', 'max pixels', 'T'];
+    const SER = [];
+    K.forEach((k, g) => k.series.forEach(sr => SER.push({g, name: sr.name, x: k.x, fixed: k.fixed, rows: sr.rows, sd: sr.sd, rt: sr.rt, cost: sr.cost, w: g === 1 ? 4 : g === 2 ? 3 : 2})));
+    SER[0].name = 'HF backend, batch size 1-32'; SER[1].name = 'vLLM backend, batch size 1-32';
+    SER[2].name = '.mp4 video, 4-128 frames'; SER[3].name = '.jpg frames, 4-128 frames';
+    SER[4].name = 'Uniform sampling, 32 / 64 frames'; SER[5].name = '1 fps sampling, cap 32 / 64';
+    SER[6].name = 'Video decoder'; SER[7].name = 'Frame resolution'; SER[8].name = 'Temperature';
+    const PLAB = [x => 'bs=' + x, x => 'bs=' + x, x => x + 'f', x => x + 'f', x => x + 'f', x => '≤' + x + 'f', x => x, x => x.replace(',', '') .slice(0, 3) + 'k px', x => 'T=' + x];
+    const COL = ['#2a78d6', '#0d7d8c', '#eb6834', '#eda100', '#1baf7a', '#4a3aa7', '#8a8780', '#e87ba4', '#a4318f'];
+    const wrap = document.getElementById('kc-wrap'), tabs = document.getElementById('ds-tabs'), tip = document.getElementById('kc-tip');
     let cur = 0;
     function showTip(ev, html) { tip.innerHTML = html; tip.style.opacity = 1; tip.style.left = (ev.clientX + 14) + 'px'; tip.style.top = (ev.clientY + 14) + 'px'; }
     function hideTip() { tip.style.opacity = 0; }
     function S(tag, a) { const e = document.createElementNS('http://www.w3.org/2000/svg', tag); for (const k in a) e.setAttribute(k, a[k]); return e; }
     function fmt(v) { return v.toFixed(1); }
-
-    function chart(k, di) {
-      const W = 440, H = 230, pl = 40, pr = 16, pt = 14, pb = 34, iw = W - pl - pr, ih = H - pt - pb;
-      const n = k.x.length, xs = i => pl + (n === 1 ? iw / 2 : i * iw / (n - 1)) * 0.92 + iw * 0.04;
-      const vals = []; k.series.forEach(s => s.rows.forEach((r, i) => { const v = r[di]; if (v != null) { const sd = s.sd && s.sd[i][di] || 0; vals.push(v - sd, v + sd); } })); vals.push(REF[di]);
-      let lo = Math.min(...vals), hi = Math.max(...vals); let pad = Math.max((hi - lo) * 0.22, 1.2); lo -= pad; hi += pad;
-      const ys = v => pt + ih - (v - lo) / (hi - lo) * ih;
-      const svg = S('svg', {viewBox: `0 0 ${W} ${H}`, class: k.series.length > 1 ? 'multi' : ''});
-      // y grid
-      const step = (hi - lo) > 12 ? 5 : (hi - lo) > 5 ? 2 : 1;
-      for (let v = Math.ceil(lo / step) * step; v <= hi; v += step) {
-        svg.appendChild(S('line', {class: 'kc-grid', x1: pl, x2: pl + iw, y1: ys(v), y2: ys(v)}));
-        const t = S('text', {class: 'kc-axis', x: pl - 6, y: ys(v) + 3.5, 'text-anchor': 'end'}); t.textContent = v; svg.appendChild(t);
-      }
-      k.x.forEach((lab, i) => { const t = S('text', {class: 'kc-axis', x: xs(i), y: pt + ih + 14, 'text-anchor': 'middle'}); t.textContent = lab; svg.appendChild(t); });
-      const xt = S('text', {class: 'kc-axis-title', x: pl + iw / 2, y: H - 3, 'text-anchor': 'middle'}); xt.textContent = k.xlab; svg.appendChild(xt);
-      const yt = S('text', {class: 'kc-axis-title', x: -(pt + ih / 2), y: 10, 'text-anchor': 'middle', transform: 'rotate(-90)'}); yt.textContent = 'accuracy (%)'; svg.appendChild(yt);
-      // reference line
-      const ry = ys(REF[di]);
-      svg.appendChild(S('line', {class: 'kc-ref', x1: pl, x2: pl + iw, y1: ry, y2: ry}));
-      // best
-      let best = {v: -1};
-      k.series.forEach((s, si) => s.rows.forEach((r, i) => { if (r[di] > best.v) best = {v: r[di], si, i}; }));
-      const groups = [], dotGroups = [];
-      k.series.forEach((s, si) => {
-        const col = PAL[si], g = S('g', {class: 'kc-series'}), gd = S('g', {class: 'kc-series'});
-        const pts = s.rows.map((r, i) => [xs(i), ys(r[di])]);
-        const d = pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ');
-        if (pts.length > 1) { g.appendChild(S('path', {class: 'halo', d})); g.appendChild(S('path', {class: 'line', d, stroke: col})); }
-        const on = () => { svg.classList.add('dim'); g.classList.add('on'); gd.classList.add('on'); leg[si] && leg[si].classList.add('on'); };
-        const off = () => { svg.classList.remove('dim'); g.classList.remove('on'); gd.classList.remove('on'); leg[si] && leg[si].classList.remove('on'); hideTip(); };
-        if (pts.length > 1) { const hit = S('path', {class: 'hit', d}); hit.addEventListener('mouseenter', e => { on(); showTip(e, '<b>' + s.name + '</b><br><span class="mut">runtime ' + s.rt[di] + ' min on ' + DS[di] + '</span>'); }); hit.addEventListener('mousemove', e => showTip(e, '<b>' + s.name + '</b><br><span class="mut">runtime ' + s.rt[di] + ' min on ' + DS[di] + '</span>')); hit.addEventListener('mouseleave', off); g.appendChild(hit); }
-        s.rows.forEach((r, i) => {
-          const v = r[di], sd = s.sd && s.sd[i][di]; if (v == null) return;
-          const cx = xs(i), cy = ys(v);
-          if (sd > 0) { gd.appendChild(S('line', {class: 'err', x1: cx, x2: cx, y1: ys(v + sd), y2: ys(v - sd), stroke: col, 'stroke-width': 1.5})); [ys(v + sd), ys(v - sd)].forEach(yy => gd.appendChild(S('line', {class: 'err', x1: cx - 3, x2: cx + 3, y1: yy, y2: yy, stroke: col, 'stroke-width': 1.5}))); }
-          const c = S('circle', {cx, cy, r: 4.2, fill: col});
-          const html = '<b>' + DS[di] + ': ' + fmt(v) + (sd > 0 ? ' &plusmn; ' + sd.toFixed(1) : '') + '%</b><br>' + (k.series.length > 1 ? s.name + ' &middot; ' : '') + k.xlab + ' = ' + k.x[i] + '<br><span class="mut">fixed: ' + k.fixed + '</span><br><span class="mut">' + (v - REF[di] >= 0 ? '+' : '') + (v - REF[di]).toFixed(1) + 'pp vs. reference</span>';
-          c.addEventListener('mouseenter', e => { on(); c.setAttribute('r', 6); showTip(e, html); });
-          c.addEventListener('mousemove', e => showTip(e, html));
-          c.addEventListener('mouseleave', () => { off(); c.setAttribute('r', 4.2); });
-          gd.appendChild(c);
-          const lbl = S('text', {class: 'vl', x: cx, y: cy - 8 - (sd > 0 ? ys(v) - ys(v + sd) : 0), 'text-anchor': 'middle', fill: col}); lbl.textContent = fmt(v); gd.appendChild(lbl);
-        });
-        svg.appendChild(g); groups.push(g); dotGroups.push(gd);
-      });
-      dotGroups.forEach(gd => svg.appendChild(gd));
-      const bx = xs(best.i), by = ys(best.v);
-      let sp = ''; for (let j = 0; j < 10; j++) { const r = j % 2 ? 3.2 : 7.5, a = Math.PI / 2 + j * Math.PI / 5; sp += (j ? 'L' : 'M') + (bx + r * Math.cos(a)).toFixed(1) + ' ' + (by - r * Math.sin(a)).toFixed(1) + ' '; }
-      svg.appendChild(S('path', {class: 'kc-best', d: sp + 'Z'}));
-      // legend
-      const legEl = document.createElement('div'); legEl.className = 'kc-legend'; const leg = [];
-      if (k.series.length > 1) k.series.forEach((s, si) => { const e = document.createElement('span'); e.innerHTML = '<i style="background:' + PAL[si] + '"></i>' + s.name; e.addEventListener('mouseenter', () => { svg.classList.add('dim'); groups[si].classList.add('on'); dotGroups[si].classList.add('on'); e.classList.add('on'); }); e.addEventListener('mouseleave', () => { svg.classList.remove('dim'); groups[si].classList.remove('on'); dotGroups[si].classList.remove('on'); e.classList.remove('on'); }); legEl.appendChild(e); leg.push(e); });
-      const rt = document.createElement('span'); rt.innerHTML = '<i class="dash"></i>reference configuration: ' + fmt(REF[di]); rt.style.cursor = 'default'; legEl.appendChild(rt);
-      const rs = document.createElement('span'); rs.innerHTML = '<span style="color:#d03b3b">&#9733;</span> best: ' + fmt(best.v) + (k.series.length > 1 ? ' (' + k.series[best.si].name + ', ' : ' (') + k.x[best.i] + ') &middot; runtime ' + k.series.map(s => s.rt[di] + ' min').join(' / '); rs.style.cursor = 'default'; legEl.appendChild(rs);
-      return {svg, legEl};
+    function fx(v) { return v >= 10 ? v.toFixed(0) : v.toFixed(2); }
+    function star(cx, cy, ro, ri) { let d = ''; for (let j = 0; j < 10; j++) { const r = j % 2 ? ri : ro, a = Math.PI / 2 + j * Math.PI / 5; d += (j ? 'L' : 'M') + (cx + r * Math.cos(a)).toFixed(1) + ' ' + (cy - r * Math.sin(a)).toFixed(1) + ' '; } return d + 'Z'; }
+    function smooth(pts) {
+      if (pts.length < 3) return pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ');
+      let d = 'M' + pts[0][0].toFixed(1) + ' ' + pts[0][1].toFixed(1);
+      for (let i = 0; i < pts.length - 1; i++) { const p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2; d += ' C' + (p1[0] + (p2[0] - p0[0]) / 6).toFixed(1) + ' ' + (p1[1] + (p2[1] - p0[1]) / 6).toFixed(1) + ' ' + (p2[0] - (p3[0] - p1[0]) / 6).toFixed(1) + ' ' + (p2[1] - (p3[1] - p1[1]) / 6).toFixed(1) + ' ' + p2[0].toFixed(1) + ' ' + p2[1].toFixed(1); }
+      return d;
     }
+
     function render() {
-      grid.innerHTML = '';
-      K.forEach(k => {
-        const card = document.createElement('div'); card.className = 'knob-card';
-        card.innerHTML = '<div class="kc-title">' + k.title + '</div><div class="kc-fixed"><b>Fixed:</b> ' + k.fixed + '</div>';
-        const {svg, legEl} = chart(k, cur); card.appendChild(svg); card.appendChild(legEl);
-        const nt = document.createElement('div'); nt.className = 'kc-note'; nt.innerHTML = k.note; card.appendChild(nt);
-        grid.appendChild(card);
+      const di = cur;
+      wrap.innerHTML = '';
+      const row = document.createElement('div'); row.className = 'kc-row';
+      const chartCol = document.createElement('div'); chartCol.className = 'kc-chart';
+      const W = 1000, H = 500, pl = 48, pr = 28, pt = 18, pb = 48, iw = W - pl - pr, ih = H - pt - pb;
+      const pts = []; // {sr, si, i, x, y, sd}
+      SER.forEach((sr, si) => sr.rows.forEach((r, i) => { const y = r[di], x = sr.cost[i][di]; if (y == null || x == null) return; pts.push({sr, si, i, x, y, sd: sr.sd && sr.sd[i][di] || 0}); }));
+      const xsAll = pts.map(p => p.x), ysAll = pts.flatMap(p => [p.y - p.sd, p.y + p.sd]).concat([REF[di]]);
+      const xMin = Math.min(...xsAll) * 0.8, xMax = Math.max(...xsAll) * 1.35;
+      let lo = Math.min(...ysAll), hi = Math.max(...ysAll); const pad = Math.max((hi - lo) * 0.12, 1); lo -= pad; hi += pad;
+      const lx0 = Math.log10(xMin), lx1 = Math.log10(xMax);
+      const xs = x => pl + (Math.log10(x) - lx0) / (lx1 - lx0) * iw;
+      const ys = v => pt + ih - (v - lo) / (hi - lo) * ih;
+      const svg = S('svg', {viewBox: `0 0 ${W} ${H}`});
+      // x ticks (log)
+      for (let e = -1; e <= 2; e++) for (const m of [1, 2, 5]) { const v = m * Math.pow(10, e); if (v < xMin || v > xMax) continue; const x = xs(v); svg.appendChild(S('line', {class: 'kc-grid', x1: x, x2: x, y1: pt, y2: pt + ih})); const t = S('text', {class: 'kc-axis', x, y: pt + ih + 15, 'text-anchor': 'middle'}); t.textContent = (v < 1 ? v.toFixed(1) : v) + '×'; svg.appendChild(t); }
+      const step = (hi - lo) > 20 ? 5 : (hi - lo) > 8 ? 2 : 1;
+      for (let v = Math.ceil(lo / step) * step; v <= hi; v += step) { svg.appendChild(S('line', {class: 'kc-grid', x1: pl, x2: pl + iw, y1: ys(v), y2: ys(v)})); const t = S('text', {class: 'kc-axis', x: pl - 7, y: ys(v) + 3.5, 'text-anchor': 'end'}); t.textContent = v; svg.appendChild(t); }
+      const xt = S('text', {class: 'kc-axis-title', x: pl + iw / 2, y: H - 6, 'text-anchor': 'middle'}); xt.textContent = 'relative compute cost (seconds per item vs. the reference run, log scale) — right = more expensive'; svg.appendChild(xt);
+      const yt = S('text', {class: 'kc-axis-title', x: -(pt + ih / 2), y: 12, 'text-anchor': 'middle', transform: 'rotate(-90)'}); yt.textContent = 'accuracy (%) on ' + DS[di]; svg.appendChild(yt);
+      // reference guides
+      svg.appendChild(S('line', {class: 'kc-ref', x1: pl, x2: pl + iw, y1: ys(REF[di]), y2: ys(REF[di])}));
+      svg.appendChild(S('line', {class: 'kc-sep', x1: xs(1), x2: xs(1), y1: pt, y2: pt + ih}));
+      // best
+      let best = pts[0]; pts.forEach(p => { if (p.y > best.y) best = p; });
+      const groups = [], dots = [], leg = [];
+      const isoOn = si => { svg.classList.add('dim'); groups[si].classList.add('on'); dots[si].classList.add('on'); leg[si] && leg[si].classList.add('on'); };
+      const isoOff = si => { svg.classList.remove('dim'); groups[si].classList.remove('on'); dots[si].classList.remove('on'); leg[si] && leg[si].classList.remove('on'); hideTip(); };
+      SER.forEach((sr, si) => {
+        const col = COL[si], g = S('g', {class: 'kc-series', style: '--kw:' + sr.w}), gd = S('g', {class: 'kc-series'});
+        const mine = pts.filter(p => p.si === si);
+        const coords = mine.map(p => [xs(p.x), ys(p.y)]);
+        const d = smooth(coords);
+        const ttl = '<b>' + sr.name + '</b><br><span class="mut">' + GROUPS[sr.g] + ' &middot; sweep runtime ' + sr.rt[di] + ' min on ' + DS[di] + '</span><br><span class="mut">fixed: ' + sr.fixed + '</span>';
+        if (mine.length > 1) {
+          g.appendChild(S('path', {class: 'halo', d, 'stroke-width': sr.w + 3}));
+          g.appendChild(S('path', {class: 'line', d, stroke: col, 'stroke-width': sr.w}));
+          const hit = S('path', {class: 'hit', d});
+          hit.addEventListener('mouseenter', e => { isoOn(si); showTip(e, ttl); }); hit.addEventListener('mousemove', e => showTip(e, ttl)); hit.addEventListener('mouseleave', () => isoOff(si));
+          g.appendChild(hit);
+        }
+        mine.forEach((p, idx) => {
+          const cx = xs(p.x), cy = ys(p.y);
+          if (p.sd > 0) { gd.appendChild(S('line', {class: 'err', x1: cx, x2: cx, y1: ys(p.y + p.sd), y2: ys(p.y - p.sd), stroke: col, 'stroke-width': 1.5})); [ys(p.y + p.sd), ys(p.y - p.sd)].forEach(yy => gd.appendChild(S('line', {class: 'err', x1: cx - 3.5, x2: cx + 3.5, y1: yy, y2: yy, stroke: col, 'stroke-width': 1.5}))); }
+          const rad = 3.4 + (sr.w >= 4 ? 1 : 0) + (mine.length > 1 ? idx / (mine.length - 1) * 2.4 : 0);
+          const c = S('circle', {cx, cy, r: rad, fill: col});
+          const lab = PLAB[si](sr.x[p.i]);
+          const html = '<b>' + DS[di] + ': ' + fmt(p.y) + (p.sd > 0 ? ' &plusmn; ' + p.sd.toFixed(1) : '') + '%</b> &middot; ' + fx(p.x) + '× cost<br>' + sr.name + ' &middot; ' + lab + '<br><span class="mut">fixed: ' + sr.fixed + '</span><br><span class="mut">' + (p.y - REF[di] >= 0 ? '+' : '') + (p.y - REF[di]).toFixed(1) + 'pp vs. reference &middot; sweep runtime ' + sr.rt[di] + ' min</span>';
+          c.addEventListener('mouseenter', e => { isoOn(si); c.setAttribute('r', rad + 2); showTip(e, html); });
+          c.addEventListener('mousemove', e => showTip(e, html));
+          c.addEventListener('mouseleave', () => { isoOff(si); c.setAttribute('r', rad); });
+          gd.appendChild(c);
+          // point label: every point for short sweeps, the end points for long ones; the rest show on hover
+          const atRef = Math.abs(p.x - 1) < 0.06 && Math.abs(p.y - REF[di]) < 0.05; // the shared reference run: labelled once by the black star
+          const always = !atRef && (mine.length <= 3 || idx === mine.length - 1 || (idx === 0 && mine.length > 3 && sr.g !== 0));
+          const lbl = S('text', {class: 'vl' + (always ? ' always' : ''), x: cx + 7, y: cy - 7, fill: col}); lbl.textContent = lab + ' ' + fmt(p.y); gd.appendChild(lbl);
+        });
+        svg.appendChild(g); groups.push(g); dots.push(gd);
       });
+      dots.forEach(gd => svg.appendChild(gd));
+      svg.appendChild(S('path', {class: 'kc-star base', d: star(xs(1), ys(REF[di]), 8, 3.5)}));
+      const bl = S('text', {class: 'kc-axis', x: xs(1) - 10, y: ys(REF[di]) + 4, 'text-anchor': 'end', fill: '#333', style: 'font-weight:700'}); bl.textContent = 'reference ' + fmt(REF[di]); svg.appendChild(bl);
+      if (!(best.si === 0 && best.i === 0)) svg.appendChild(S('path', {class: 'kc-star', d: star(xs(best.x), ys(best.y), 10, 4.3)}));
+      chartCol.appendChild(svg);
+      // best panel
+      const bp = document.createElement('div'); bp.className = 'kc-best'; const bs = best.sr;
+      bp.innerHTML = '<div class="bk">&#9733; Best on ' + DS[di] + '</div><div class="bv">' + fmt(best.y) + '%</div><div class="bs">' + bs.name + ' &middot; ' + PLAB[best.si](bs.x[best.i]) + '</div><dl>'
+        + '<div class="cr"><span>compute</span><span>' + fx(best.x) + '× reference</span></div>'
+        + '<div class="cr"><span>vs. reference</span><span>' + (best.y - REF[di] >= 0 ? '+' : '') + fmt(best.y - REF[di]) + 'pp</span></div>'
+        + '<div class="cr"><span>reference</span><span>' + fmt(REF[di]) + '% at 1×</span></div>'
+        + '<div class="cr"><span>sweep runtime</span><span>' + bs.rt[di] + ' min</span></div>'
+        + '<div class="cr"><span>fixed</span><span style="font-weight:normal;color:#555">' + bs.fixed + '</span></div></dl>';
+      row.appendChild(chartCol); row.appendChild(bp); wrap.appendChild(row);
+      const lg = document.createElement('div'); lg.className = 'kc-legend';
+      SER.forEach((sr, si) => { const e = document.createElement('span'); e.innerHTML = '<i style="background:' + COL[si] + ';height:' + sr.w + 'px"></i>' + sr.name; e.addEventListener('mouseenter', () => isoOn(si)); e.addEventListener('mouseleave', () => isoOff(si)); lg.appendChild(e); leg.push(e); });
+      const rf = document.createElement('span'); rf.innerHTML = '<i class="dash"></i>reference configuration: ' + fmt(REF[di]) + '% at 1× (black star)'; rf.style.cursor = 'default'; lg.appendChild(rf);
+      wrap.appendChild(lg);
+      const ul = document.createElement('ul'); ul.className = 'kc-notes';
+      K.forEach((k, g) => { const li = document.createElement('li'); li.innerHTML = '<i style="background:' + COL[SER.findIndex(sr => sr.g === g)] + '"></i>' + k.note; ul.appendChild(li); });
+      wrap.appendChild(ul);
     }
     DS.forEach((d, i) => { const b = document.createElement('button'); b.className = 'ds-tab' + (i === 5 ? ' metav' : '') + (i === cur ? ' active' : ''); b.textContent = d; b.onclick = () => { cur = i; [...tabs.children].forEach((c, j) => c.classList.toggle('active', j === i)); render(); }; tabs.appendChild(b); });
     render();
